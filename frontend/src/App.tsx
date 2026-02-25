@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   AreaChart,
   Area,
@@ -121,18 +122,18 @@ function Navbar() {
 
         {/* Desktop CTA */}
         <div className="hidden items-center gap-3 md:flex">
-          <a
-            href="#"
+          <Link
+            to="/login"
             className="text-sm font-medium text-muted-foreground transition hover:text-foreground"
           >
             Masuk
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="/register"
             className="rounded-lg bg-cta px-5 py-2.5 text-sm font-semibold text-cta-foreground shadow-sm transition hover:opacity-90"
           >
             Mulai Gratis
-          </a>
+          </Link>
         </div>
 
         {/* Mobile hamburger */}
@@ -163,18 +164,18 @@ function Navbar() {
               </a>
             ))}
             <hr className="border-border" />
-            <a
-              href="#"
+            <Link
+              to="/login"
               className="text-sm font-medium text-muted-foreground transition hover:text-foreground"
             >
               Masuk
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              to="/register"
               className="rounded-lg bg-cta px-5 py-2.5 text-center text-sm font-semibold text-cta-foreground shadow-sm transition hover:opacity-90"
             >
               Mulai Gratis
-            </a>
+            </Link>
           </nav>
         </div>
       )}
@@ -223,13 +224,13 @@ function HeroSection() {
 
             {/* CTAs */}
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <a
-                href="#"
+              <Link
+                to="/register"
                 className="group inline-flex items-center justify-center gap-2 rounded-xl bg-cta px-7 py-3.5 text-base font-semibold text-cta-foreground shadow-lg shadow-cta/25 transition hover:shadow-xl hover:shadow-cta/30 hover:brightness-105"
               >
                 Coba Gratis Sekarang
                 <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
-              </a>
+              </Link>
               <a
                 href="#"
                 className="group inline-flex items-center justify-center gap-2 rounded-xl border-2 border-primary/30 bg-white px-7 py-3.5 text-base font-semibold text-primary transition hover:border-primary/50 hover:bg-primary/5"
@@ -838,8 +839,8 @@ function PricingSection() {
                 ))}
               </ul>
 
-              <a
-                href="#"
+              <Link
+                to="/register"
                 className={`mt-8 block rounded-xl py-3.5 text-center text-sm font-semibold transition ${
                   plan.highlighted
                     ? "bg-cta text-cta-foreground shadow-md shadow-cta/20 hover:brightness-105"
@@ -847,7 +848,7 @@ function PricingSection() {
                 }`}
               >
                 {plan.cta}
-              </a>
+              </Link>
             </div>
           ))}
         </div>
@@ -876,13 +877,13 @@ function CTABanner() {
           </p>
         </div>
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <a
-            href="#"
+          <Link
+            to="/register"
             className="group inline-flex items-center gap-2 rounded-xl bg-cta px-8 py-4 text-base font-semibold text-cta-foreground shadow-lg transition hover:brightness-105"
           >
             Coba Gratis Sekarang
             <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
-          </a>
+          </Link>
           <a
             href="#"
             className="inline-flex items-center gap-2 rounded-xl border-2 border-primary-foreground/30 px-8 py-4 text-base font-semibold text-primary-foreground transition hover:bg-white/10"
