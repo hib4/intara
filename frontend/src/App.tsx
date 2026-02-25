@@ -1,12 +1,17 @@
 import { useState } from "react";
 import {
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import {
   Bot,
-  FileText,
-  Upload,
-  Share2,
-  ShoppingCart,
-  GraduationCap,
-  Stethoscope,
   Check,
   Menu,
   X,
@@ -15,14 +20,40 @@ import {
   MessageSquare,
   Sparkles,
   Star,
-  ChevronRight,
+  TrendingUp,
+  BarChart3,
+  BrainCircuit,
+  Database,
+  Lightbulb,
+  ShieldCheck,
+  Send,
+  Headphones,
 } from "lucide-react";
 
 /* ─────────────────────────────────────────────
- *  INTARA — Landing Page
- *  Intelligence Nusantara
+ *  INTARA — Landing Page v2
+ *  Intelligence Nusantara · Super-App AI UMKM
  *  All copy in Indonesian
  * ───────────────────────────────────────────── */
+
+/* ── Mock data ─────────────────────────────── */
+const cashflowData = [
+  { name: "Jan", pemasukan: 4200, pengeluaran: 2800 },
+  { name: "Feb", pemasukan: 3800, pengeluaran: 2600 },
+  { name: "Mar", pemasukan: 5100, pengeluaran: 3200 },
+  { name: "Apr", pemasukan: 4700, pengeluaran: 2900 },
+  { name: "Mei", pemasukan: 6300, pengeluaran: 3400 },
+  { name: "Jun", pemasukan: 5800, pengeluaran: 3100 },
+  { name: "Jul", pemasukan: 7200, pengeluaran: 3600 },
+];
+
+const productProfitData = [
+  { name: "Kopi Susu", profit: 4800 },
+  { name: "Matcha", profit: 3900 },
+  { name: "Es Teh", profit: 3200 },
+  { name: "Croissant", profit: 2800 },
+  { name: "Roti Bakar", profit: 2100 },
+];
 
 function App() {
   return (
@@ -30,8 +61,8 @@ function App() {
       <Navbar />
       <HeroSection />
       <LogoCloud />
+      <BentoFeatures />
       <HowItWorks />
-      <UseCases />
       <PricingSection />
       <CTABanner />
       <Footer />
@@ -40,6 +71,17 @@ function App() {
 }
 
 /* ── Navbar ──────────────────────────────────── */
+
+function scrollToSection(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
+  e.preventDefault();
+  const id = href.replace("#", "");
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    // Update URL hash without jumping
+    window.history.pushState(null, "", href);
+  }
+}
 
 function Navbar() {
   const [open, setOpen] = useState(false);
@@ -69,6 +111,7 @@ function Navbar() {
             <a
               key={l.href}
               href={l.href}
+              onClick={(e) => scrollToSection(e, l.href)}
               className="text-sm font-medium text-muted-foreground transition hover:text-foreground"
             >
               {l.label}
@@ -110,7 +153,10 @@ function Navbar() {
               <a
                 key={l.href}
                 href={l.href}
-                onClick={() => setOpen(false)}
+                onClick={(e) => {
+                  scrollToSection(e, l.href);
+                  setOpen(false);
+                }}
                 className="text-sm font-medium text-muted-foreground transition hover:text-foreground"
               >
                 {l.label}
@@ -146,128 +192,215 @@ function HeroSection() {
       <div className="pointer-events-none absolute -bottom-32 right-0 h-[400px] w-[400px] rounded-full bg-cta/5 blur-3xl" />
 
       <div className="relative mx-auto max-w-6xl px-6">
-        <div className="mx-auto max-w-3xl text-center">
-          {/* Badge */}
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary">
-            <Sparkles className="h-4 w-4" />
-            Platform AI No-Code #1 untuk UMKM Indonesia
-          </div>
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          {/* ─ Left: Copy ─ */}
+          <div>
+            {/* Badge */}
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary">
+              <Sparkles className="h-4 w-4" />
+              Super-App AI #1 untuk UMKM Indonesia
+            </div>
 
-          {/* Headline */}
-          <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-foreground sm:text-5xl md:text-6xl">
-            Punya <span className="text-primary">Asisten AI</span> Sendiri untuk
-            Usahamu,{" "}
-            <span className="relative">
-              <span className="relative z-10">Kurang dari 5 Menit</span>
-              <span className="absolute bottom-1 left-0 -z-0 h-3 w-full bg-cta/20 sm:bottom-2 sm:h-4" />
-            </span>
-          </h1>
+            {/* Headline */}
+            <h1 className="text-4xl font-extrabold leading-[1.12] tracking-tight text-foreground sm:text-5xl">
+              Satu <span className="text-primary">AI Cerdas</span> untuk CS
+              Otomatis &amp; Analisis Bisnis{" "}
+              <span className="relative whitespace-nowrap">
+                <span className="relative z-10">UMKM Anda</span>
+                <span className="absolute bottom-1 left-0 -z-0 h-3 w-full bg-cta/20 sm:h-4" />
+              </span>
+            </h1>
 
-          {/* Sub-headline */}
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
-            Tanpa coding. Tanpa ribet. Cukup tulis instruksi, unggah dokumen
-            bisnismu, dan langsung dapatkan chatbot AI yang siap melayani
-            pelanggan 24/7.
-          </p>
+            {/* Sub-headline */}
+            <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted-foreground">
+              Otomasi balasan pelanggan 24/7{" "}
+              <strong className="text-foreground">dan</strong> pahami data
+              keuangan bisnis Anda — arus kas, tren penjualan, hingga produk
+              paling laris — cukup dengan{" "}
+              <strong className="text-foreground">bertanya ke AI</strong>. Tanpa
+              coding, tanpa keahlian finansial.
+            </p>
 
-          {/* CTAs */}
-          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <a
-              href="#"
-              className="group inline-flex items-center gap-2 rounded-xl bg-cta px-8 py-4 text-base font-semibold text-cta-foreground shadow-lg shadow-cta/25 transition hover:shadow-xl hover:shadow-cta/30 hover:brightness-105"
-            >
-              Buat AI Sekarang
-              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
-            </a>
-            <a
-              href="#"
-              className="group inline-flex items-center gap-2 rounded-xl border-2 border-primary/30 bg-white px-8 py-4 text-base font-semibold text-primary transition hover:border-primary/50 hover:bg-primary/5"
-            >
-              <Play className="h-4 w-4" />
-              Lihat Demo
-            </a>
-          </div>
+            {/* CTAs */}
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <a
+                href="#"
+                className="group inline-flex items-center justify-center gap-2 rounded-xl bg-cta px-7 py-3.5 text-base font-semibold text-cta-foreground shadow-lg shadow-cta/25 transition hover:shadow-xl hover:shadow-cta/30 hover:brightness-105"
+              >
+                Coba Gratis Sekarang
+                <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+              </a>
+              <a
+                href="#"
+                className="group inline-flex items-center justify-center gap-2 rounded-xl border-2 border-primary/30 bg-white px-7 py-3.5 text-base font-semibold text-primary transition hover:border-primary/50 hover:bg-primary/5"
+              >
+                <Play className="h-4 w-4" />
+                Lihat Demo
+              </a>
+            </div>
 
-          {/* Social proof */}
-          <p className="mt-8 flex items-center justify-center gap-2 text-sm text-muted-foreground">
-            <span className="flex -space-x-2">
-              {[
-                "bg-blue-400",
-                "bg-green-400",
-                "bg-amber-400",
-                "bg-rose-400",
-              ].map((bg, i) => (
-                <span
-                  key={i}
-                  className={`inline-flex h-7 w-7 items-center justify-center rounded-full border-2 border-white text-[10px] font-bold text-white ${bg}`}
-                >
-                  {String.fromCharCode(65 + i)}
-                </span>
-              ))}
-            </span>
-            Dipercaya <strong className="text-foreground">500+</strong> pelaku
-            usaha di Indonesia
-          </p>
-        </div>
-
-        {/* Dashboard mockup */}
-        <div className="mx-auto mt-16 max-w-4xl">
-          <div className="rounded-2xl border border-border bg-white p-2 shadow-2xl shadow-primary/10">
-            <div className="rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 p-6 sm:p-10">
-              {/* Mock header bar */}
-              <div className="flex items-center gap-3">
-                <div className="flex gap-1.5">
-                  <span className="h-3 w-3 rounded-full bg-red-400" />
-                  <span className="h-3 w-3 rounded-full bg-yellow-400" />
-                  <span className="h-3 w-3 rounded-full bg-green-400" />
-                </div>
-                <div className="h-6 w-48 rounded-md bg-slate-200" />
-              </div>
-
-              {/* Mock content */}
-              <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3">
-                {/* Stat cards */}
+            {/* Social proof */}
+            <div className="mt-8 flex items-center gap-3 text-sm text-muted-foreground">
+              <span className="flex -space-x-2">
                 {[
-                  {
-                    label: "Total Chat",
-                    value: "1,284",
-                    color: "text-primary",
-                  },
-                  {
-                    label: "Response Rate",
-                    value: "98.5%",
-                    color: "text-green-600",
-                  },
-                  {
-                    label: "Dokumen Terlatih",
-                    value: "24",
-                    color: "text-cta",
-                  },
-                ].map((stat) => (
-                  <div
-                    key={stat.label}
-                    className="rounded-xl border border-border bg-white p-4 shadow-sm"
+                  "bg-blue-400",
+                  "bg-emerald-400",
+                  "bg-amber-400",
+                  "bg-rose-400",
+                ].map((bg, i) => (
+                  <span
+                    key={i}
+                    className={`inline-flex h-7 w-7 items-center justify-center rounded-full border-2 border-white text-[10px] font-bold text-white ${bg}`}
                   >
-                    <p className="text-xs font-medium text-muted-foreground">
-                      {stat.label}
+                    {String.fromCharCode(65 + i)}
+                  </span>
+                ))}
+              </span>
+              Dipercaya{" "}
+              <strong className="text-foreground">500+ pelaku usaha</strong> di
+              seluruh Indonesia
+            </div>
+          </div>
+
+          {/* ─ Right: Visual Split — overlapping cards ─ */}
+          <div className="relative mx-auto w-full max-w-lg lg:mx-0 lg:max-w-none">
+            {/* Card 1: Cashflow Chart */}
+            <div className="relative z-10 rounded-2xl border border-border bg-white p-5 shadow-xl shadow-primary/10">
+              <div className="mb-3 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+                    <TrendingUp className="h-4 w-4 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-foreground">
+                      Arus Kas Bulanan
                     </p>
-                    <p className={`mt-1 text-2xl font-bold ${stat.color}`}>
-                      {stat.value}
+                    <p className="text-xs text-muted-foreground">
+                      Jan — Jul 2026
                     </p>
                   </div>
-                ))}
+                </div>
+                <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-600">
+                  +23%
+                </span>
+              </div>
+              <div className="h-48 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={cashflowData}>
+                    <defs>
+                      <linearGradient
+                        id="gradPemasukan"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop
+                          offset="5%"
+                          stopColor="#0258A3"
+                          stopOpacity={0.2}
+                        />
+                        <stop
+                          offset="95%"
+                          stopColor="#0258A3"
+                          stopOpacity={0}
+                        />
+                      </linearGradient>
+                      <linearGradient
+                        id="gradPengeluaran"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop
+                          offset="5%"
+                          stopColor="#f97316"
+                          stopOpacity={0.15}
+                        />
+                        <stop
+                          offset="95%"
+                          stopColor="#f97316"
+                          stopOpacity={0}
+                        />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                    <XAxis
+                      dataKey="name"
+                      tick={{ fontSize: 11, fill: "#94a3b8" }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <YAxis hide />
+                    <Tooltip
+                      contentStyle={{
+                        borderRadius: "0.75rem",
+                        border: "1px solid #e2e8f0",
+                        fontSize: 12,
+                      }}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="pemasukan"
+                      stroke="#0258A3"
+                      strokeWidth={2.5}
+                      fill="url(#gradPemasukan)"
+                      name="Pemasukan"
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="pengeluaran"
+                      stroke="#f97316"
+                      strokeWidth={2}
+                      fill="url(#gradPengeluaran)"
+                      name="Pengeluaran"
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Card 2: Chat mockup (overlapping) */}
+            <div className="relative -mt-6 ml-6 rounded-2xl border border-border bg-white p-5 shadow-lg sm:ml-12 lg:-mt-10 lg:ml-16">
+              <div className="mb-3 flex items-center gap-2">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-cta/10">
+                  <MessageSquare className="h-3.5 w-3.5 text-cta" />
+                </div>
+                <p className="text-sm font-semibold text-foreground">
+                  AI Business Insight
+                </p>
               </div>
 
-              {/* Mock chat preview */}
-              <div className="mt-6 rounded-xl border border-border bg-white p-5 shadow-sm">
-                <div className="flex items-start gap-3">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-                    <MessageSquare className="h-4 w-4 text-primary" />
+              <div className="space-y-3">
+                {/* User message */}
+                <div className="flex justify-end">
+                  <div className="max-w-[85%] rounded-2xl rounded-br-md bg-primary px-4 py-2.5 text-sm text-primary-foreground">
+                    Kenapa penjualan turun minggu ini?
                   </div>
-                  <div className="space-y-2">
-                    <div className="h-3 w-64 rounded bg-slate-200" />
-                    <div className="h-3 w-48 rounded bg-slate-200" />
-                    <div className="h-3 w-56 rounded bg-slate-100" />
+                </div>
+
+                {/* AI reply */}
+                <div className="flex justify-start">
+                  <div className="max-w-[85%] rounded-2xl rounded-bl-md border border-border bg-slate-50 px-4 py-2.5 text-sm text-foreground">
+                    <p>
+                      📉 Penjualan turun <strong>18%</strong> karena{" "}
+                      <strong>Kopi Susu</strong> kehabisan stok 2 hari.
+                      Rekomendasi: restock dan jalankan promo bundling akhir
+                      pekan.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Typing indicator */}
+                <div className="flex items-center gap-1.5 px-1">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10">
+                    <Bot className="h-3 w-3 text-primary" />
+                  </div>
+                  <div className="flex gap-1">
+                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-slate-300" />
+                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-slate-300 [animation-delay:150ms]" />
+                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-slate-300 [animation-delay:300ms]" />
                   </div>
                 </div>
               </div>
@@ -282,13 +415,7 @@ function HeroSection() {
 /* ── Logo Cloud ──────────────────────────────── */
 
 function LogoCloud() {
-  const names = [
-    "TokoPedia",
-    "Grab Merchant",
-    "BukuWarung",
-    "GoFood",
-    "Shopee",
-  ];
+  const names = ["Tokopedia", "GrabMerchant", "BukuWarung", "GoFood", "Shopee"];
 
   return (
     <section className="border-y border-border/60 bg-white py-10">
@@ -311,35 +438,256 @@ function LogoCloud() {
   );
 }
 
+/* ── Bento Grid — Fitur Unggulan ─────────────── */
+
+function BentoFeatures() {
+  return (
+    <section id="fitur" className="py-20 md:py-28">
+      <div className="mx-auto max-w-6xl px-6">
+        {/* Section heading */}
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-sm font-semibold uppercase tracking-widest text-primary">
+            Fitur Unggulan
+          </p>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            Semua yang UMKM Butuhkan, dalam Satu Platform
+          </h2>
+          <p className="mt-4 text-lg text-muted-foreground">
+            Dari layanan pelanggan otomatis hingga analisis keuangan berbasis AI
+            — tanpa perlu keahlian teknis.
+          </p>
+        </div>
+
+        {/* Bento grid  — 2 cols on desktop, stack on mobile */}
+        <div className="mt-16 grid grid-cols-1 gap-5 md:grid-cols-2">
+          {/* Card 1 — No-Code RAG Chatbot (full width) */}
+          <div className="group rounded-2xl border border-border bg-white p-6 shadow-sm transition hover:shadow-md sm:p-8 md:col-span-2">
+            <div className="grid items-center gap-8 md:grid-cols-2">
+              <div>
+                <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50">
+                  <Headphones className="h-6 w-6 text-emerald-600" />
+                </div>
+                <h3 className="text-xl font-bold text-foreground">
+                  Chatbot CS Tanpa Coding
+                </h3>
+                <p className="mt-2 leading-relaxed text-muted-foreground">
+                  Upload katalog produk, FAQ, atau daftar harga dalam format PDF
+                  / TXT. Dalam hitungan menit, AI Anda siap menjawab pertanyaan
+                  pelanggan di WhatsApp, Instagram, atau website — 24 jam
+                  nonstop.
+                </p>
+
+                <ul className="mt-5 space-y-2.5">
+                  {[
+                    "Upload dokumen, langsung jadi basis pengetahuan AI",
+                    "Jawab pertanyaan produk, harga, & ketersediaan otomatis",
+                    "Bagikan link chatbot atau embed di website Anda",
+                  ].map((text) => (
+                    <li
+                      key={text}
+                      className="flex items-start gap-2.5 text-sm text-foreground"
+                    >
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+                      {text}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Mini mockup */}
+              <div className="rounded-xl border border-border bg-slate-50 p-5">
+                <div className="space-y-3">
+                  <div className="flex items-start gap-2">
+                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-200 text-[10px] font-bold text-slate-500">
+                      P
+                    </span>
+                    <div className="rounded-2xl rounded-bl-md border border-border bg-white px-4 py-2.5 text-sm text-foreground">
+                      Apakah Croissant Almond masih tersedia? Berapa harganya?
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                      <Bot className="h-3 w-3 text-primary" />
+                    </div>
+                    <div className="rounded-2xl rounded-bl-md border border-border bg-white px-4 py-2.5 text-sm text-foreground">
+                      <p>
+                        Hai! 🥐 <strong>Croissant Almond</strong> masih
+                        tersedia. Harganya <strong>Rp28.000</strong>/pcs.
+                      </p>
+                      <p className="mt-1 text-muted-foreground">
+                        Mau sekalian pesan? Saya bisa bantu ✨
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Card 2 — Smart Financial Dashboard (large) */}
+          <div className="group rounded-2xl border border-border bg-white p-6 shadow-sm transition hover:shadow-md sm:p-8">
+            <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10">
+              <BarChart3 className="h-6 w-6 text-primary" />
+            </div>
+            <h3 className="text-xl font-bold text-foreground">
+              Dashboard Keuangan Cerdas
+            </h3>
+            <p className="mt-2 leading-relaxed text-muted-foreground">
+              Lihat arus kas, margin keuntungan, dan produk paling laris secara
+              otomatis. AI mendeteksi anomali dan memberi peringatan stok
+              menipis — tanpa perlu buka spreadsheet.
+            </p>
+
+            {/* Mini bar chart mockup */}
+            <div className="mt-6 rounded-xl border border-border bg-slate-50 p-4">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                Produk Paling Untung
+              </p>
+              <div className="h-44 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={productProfitData} barSize={32}>
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      stroke="#e2e8f0"
+                      vertical={false}
+                    />
+                    <XAxis
+                      dataKey="name"
+                      tick={{ fontSize: 11, fill: "#64748b" }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <YAxis hide />
+                    <Tooltip
+                      contentStyle={{
+                        borderRadius: "0.75rem",
+                        border: "1px solid #e2e8f0",
+                        fontSize: 12,
+                      }}
+                      formatter={(value) => [
+                        `Rp${Number(value).toLocaleString("id-ID")}k`,
+                        "Profit",
+                      ]}
+                    />
+                    <Bar
+                      dataKey="profit"
+                      fill="#0258A3"
+                      radius={[6, 6, 0, 0]}
+                      name="Profit"
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+
+          {/* Card 3 — AI Conversational Analytics (large) */}
+          <div className="group rounded-2xl border border-border bg-white p-6 shadow-sm transition hover:shadow-md sm:p-8">
+            <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-cta/10">
+              <BrainCircuit className="h-6 w-6 text-cta" />
+            </div>
+            <h3 className="text-xl font-bold text-foreground">
+              AI Analitik Percakapan
+            </h3>
+            <p className="mt-2 leading-relaxed text-muted-foreground">
+              Tanya apa saja tentang bisnis Anda lewat chat. AI menjawab dengan
+              data aktual — kapan harus restock, produk mana yang perlu promo,
+              dan tren penjualan mingguan.
+            </p>
+
+            {/* Chat mockup */}
+            <div className="mt-6 space-y-3 rounded-xl border border-border bg-slate-50 p-4">
+              {/* User */}
+              <div className="flex justify-end">
+                <div className="rounded-2xl rounded-br-md bg-primary px-4 py-2.5 text-sm text-primary-foreground">
+                  Produk mana yang perlu restock minggu ini?
+                </div>
+              </div>
+
+              {/* AI */}
+              <div className="flex items-start gap-2">
+                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                  <Bot className="h-3 w-3 text-primary" />
+                </div>
+                <div className="rounded-2xl rounded-bl-md border border-border bg-white px-4 py-2.5 text-sm text-foreground">
+                  <p>
+                    Berdasarkan data 30 hari terakhir, 3 produk perlu restock
+                    segera:
+                  </p>
+                  <ul className="mt-1.5 space-y-1 text-muted-foreground">
+                    <li className="flex items-center gap-1.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-red-400" />
+                      <strong className="text-foreground">Kopi Susu</strong> —
+                      stok tersisa 12 cup (rata-rata 40/hari)
+                    </li>
+                    <li className="flex items-center gap-1.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+                      <strong className="text-foreground">
+                        Matcha Latte
+                      </strong>{" "}
+                      — stok tersisa 18 cup
+                    </li>
+                    <li className="flex items-center gap-1.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+                      <strong className="text-foreground">Croissant</strong> —
+                      stok tersisa 8 pcs
+                    </li>
+                  </ul>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    💡 Rekomendasi: Order sebelum Kamis agar stok aman weekend.
+                  </p>
+                </div>
+              </div>
+
+              {/* Input bar */}
+              <div className="flex items-center gap-2 rounded-xl border border-border bg-white px-3 py-2">
+                <input
+                  type="text"
+                  placeholder="Tanya insight bisnis Anda..."
+                  className="flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground/60"
+                  readOnly
+                />
+                <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground transition hover:opacity-90">
+                  <Send className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ── How It Works ────────────────────────────── */
 
 function HowItWorks() {
   const steps = [
     {
-      icon: FileText,
+      icon: Database,
       step: "01",
-      title: "Beri Instruksi",
+      title: "Integrasi Data & Dokumen",
       description:
-        'Tulis peran dan kepribadian AI Anda. Misalnya: "Kamu adalah asisten toko kue Ibu Ani, ramah dan suka pakai emoji."',
+        "Upload katalog produk, FAQ, atau data transaksi Anda. Mendukung format PDF, TXT, dan CSV — cukup drag-and-drop.",
     },
     {
-      icon: Upload,
+      icon: BrainCircuit,
       step: "02",
-      title: "Unggah Pengetahuan",
+      title: "AI Menganalisis",
       description:
-        "Upload katalog produk, FAQ, daftar harga, atau dokumen bisnis Anda dalam format PDF atau TXT. AI akan belajar dari situ.",
+        "Mesin AI Intara memproses dokumen untuk chatbot dan menganalisis data keuangan untuk menemukan tren, anomali, dan peluang.",
     },
     {
-      icon: Share2,
+      icon: Lightbulb,
       step: "03",
-      title: "Bagikan & Gunakan",
+      title: "Dapatkan Insight & Layani Pelanggan",
       description:
-        "Dapatkan link chatbot yang bisa langsung dibagikan ke pelanggan lewat WhatsApp, Instagram, atau website Anda.",
+        "Ambil keputusan berbasis data melalui percakapan AI dan biarkan chatbot melayani pelanggan Anda 24/7 tanpa jeda.",
     },
   ];
 
   return (
-    <section id="cara-kerja" className="py-20 md:py-28">
+    <section id="cara-kerja" className="bg-white py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-6">
         {/* Section heading */}
         <div className="mx-auto max-w-2xl text-center">
@@ -347,119 +695,37 @@ function HowItWorks() {
             Cara Kerja
           </p>
           <h2 className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Tiga Langkah Mudah, Chatbot AI Siap Jalan
+            Dari Data Mentah ke Keputusan Cerdas, 3&nbsp;Langkah Saja
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Tidak perlu keahlian teknis. Siapapun bisa membuat AI chatbot
-            profesional dalam hitungan menit.
+            Tidak perlu keahlian teknis. Intara memproses data Anda dan langsung
+            siap melayani.
           </p>
         </div>
 
         {/* Steps */}
-        <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
+        <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-3">
           {steps.map((s, idx) => (
             <div key={idx} className="group relative">
-              {/* Connector line (hidden on last) */}
+              {/* Connector line */}
               {idx < steps.length - 1 && (
-                <div className="absolute right-0 top-12 hidden h-px w-8 translate-x-full bg-border md:block" />
+                <div className="absolute right-0 top-14 hidden h-px w-6 translate-x-full bg-border md:block" />
               )}
 
-              <div className="rounded-2xl border border-border bg-white p-8 shadow-sm transition hover:shadow-md">
+              <div className="h-full rounded-2xl border border-border bg-background p-8 shadow-sm transition hover:shadow-md">
                 {/* Icon */}
                 <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10">
                   <s.icon className="h-7 w-7 text-primary" />
                 </div>
 
-                {/* Step number */}
                 <p className="mb-2 text-xs font-bold uppercase tracking-widest text-cta">
                   Langkah {s.step}
                 </p>
-
                 <h3 className="text-xl font-bold text-foreground">{s.title}</h3>
                 <p className="mt-2 leading-relaxed text-muted-foreground">
                   {s.description}
                 </p>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ── Use Cases ───────────────────────────────── */
-
-function UseCases() {
-  const cases = [
-    {
-      icon: ShoppingCart,
-      title: "Toko Online",
-      description:
-        "Otomasi layanan pelanggan: jawab pertanyaan produk, cek ongkir, dan proses pesanan 24/7 tanpa harus standby.",
-      color: "bg-blue-50 text-blue-600",
-    },
-    {
-      icon: GraduationCap,
-      title: "Dosen & Pengajar",
-      description:
-        "Buat asisten belajar untuk mahasiswa. Upload materi kuliah dan biarkan AI menjawab pertanyaan mereka kapan saja.",
-      color: "bg-amber-50 text-amber-600",
-    },
-    {
-      icon: Stethoscope,
-      title: "Klinik & Praktik Dokter",
-      description:
-        "Jawab pertanyaan umum pasien, informasi jadwal praktik, dan prosedur pendaftaran secara otomatis.",
-      color: "bg-emerald-50 text-emerald-600",
-    },
-    {
-      icon: MessageSquare,
-      title: "Agensi & Freelancer",
-      description:
-        "Sediakan asisten AI di website portofolio untuk menjawab pertanyaan klien dan menangkap leads secara otomatis.",
-      color: "bg-purple-50 text-purple-600",
-    },
-  ];
-
-  return (
-    <section id="fitur" className="bg-white py-20 md:py-28">
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-widest text-primary">
-            Siapa yang Cocok?
-          </p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Dibuat untuk Berbagai Jenis Usaha
-          </h2>
-          <p className="mt-4 text-lg text-muted-foreground">
-            Dari toko online hingga klinik, Intara membantu siapa saja yang
-            ingin memberikan pelayanan pelanggan terbaik.
-          </p>
-        </div>
-
-        <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {cases.map((c) => (
-            <div
-              key={c.title}
-              className="group rounded-2xl border border-border bg-background p-6 transition hover:border-primary/30 hover:shadow-lg"
-            >
-              <div
-                className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl ${c.color}`}
-              >
-                <c.icon className="h-6 w-6" />
-              </div>
-              <h3 className="text-lg font-bold text-foreground">{c.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                {c.description}
-              </p>
-              <a
-                href="#"
-                className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary transition hover:gap-2"
-              >
-                Pelajari
-                <ChevronRight className="h-4 w-4" />
-              </a>
             </div>
           ))}
         </div>
@@ -476,13 +742,15 @@ function PricingSection() {
       name: "Paket Pemula",
       price: "Gratis",
       priceSuffix: "",
-      description: "Cocok untuk yang baru mau coba dan eksplorasi AI chatbot.",
+      description:
+        "Cocok untuk eksplorasi AI chatbot dan melihat insight bisnis pertama Anda.",
       highlighted: false,
       badge: null,
       features: [
-        "1 Chatbot AI",
-        "Maks. 50 pesan / bulan",
-        "Upload 3 dokumen (PDF/TXT)",
+        "1 Chatbot AI (CS Otomatis)",
+        "Dashboard insight dasar",
+        "50 pesan / bulan",
+        "Upload 3 dokumen PDF/TXT",
         "Link chatbot publik",
         "Branding Intara",
       ],
@@ -493,17 +761,18 @@ function PricingSection() {
       price: "Rp149.000",
       priceSuffix: " / bulan",
       description:
-        "Untuk usaha yang serius meningkatkan pelayanan pelanggan dengan AI.",
+        "Untuk usaha yang serius meningkatkan pelayanan & memahami keuangan bisnisnya.",
       highlighted: true,
       badge: "Paling Populer",
       features: [
         "5 Chatbot AI",
+        "AI Analitik Keuangan penuh",
         "Pesan unlimited",
         "Upload 50 dokumen",
         "Custom branding (logo & warna)",
-        "Integrasi website (embed widget)",
-        "Analitik percakapan",
-        "Prioritas dukungan via WhatsApp",
+        "Embed widget di website",
+        "Analitik percakapan & keuangan",
+        "Prioritas support via WhatsApp",
       ],
       cta: "Langganan Sekarang",
     },
@@ -520,7 +789,7 @@ function PricingSection() {
             Harga Transparan, Tanpa Biaya Tersembunyi
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Mulai gratis, upgrade kapan saja sesuai kebutuhan bisnis Anda.
+            Mulai gratis, upgrade kapan saja sesuai pertumbuhan bisnis Anda.
           </p>
         </div>
 
@@ -534,7 +803,6 @@ function PricingSection() {
                   : "border-border bg-white shadow-sm"
               }`}
             >
-              {/* Badge */}
               {plan.badge && (
                 <span className="absolute -top-3.5 left-6 inline-flex items-center gap-1 rounded-full bg-cta px-4 py-1 text-xs font-bold text-cta-foreground shadow-sm">
                   <Star className="h-3 w-3" />
@@ -547,7 +815,6 @@ function PricingSection() {
                 {plan.description}
               </p>
 
-              {/* Price */}
               <div className="mt-6 flex items-baseline gap-1">
                 <span className="text-4xl font-extrabold tracking-tight text-foreground">
                   {plan.price}
@@ -559,7 +826,6 @@ function PricingSection() {
                 )}
               </div>
 
-              {/* Features */}
               <ul className="mt-8 space-y-3">
                 {plan.features.map((f) => (
                   <li
@@ -572,7 +838,6 @@ function PricingSection() {
                 ))}
               </ul>
 
-              {/* CTA */}
               <a
                 href="#"
                 className={`mt-8 block rounded-xl py-3.5 text-center text-sm font-semibold transition ${
@@ -597,19 +862,25 @@ function CTABanner() {
   return (
     <section className="bg-primary py-20">
       <div className="mx-auto max-w-6xl px-6 text-center">
-        <h2 className="text-3xl font-bold tracking-tight text-primary-foreground sm:text-4xl">
-          Siap Punya Asisten AI untuk Bisnismu?
-        </h2>
-        <p className="mx-auto mt-4 max-w-xl text-lg text-primary-foreground/80">
-          Bergabung dengan ratusan pelaku usaha Indonesia yang sudah menggunakan
-          Intara untuk meningkatkan pelayanan pelanggan mereka.
-        </p>
+        <div className="mx-auto max-w-2xl">
+          <div className="mb-6 inline-flex items-center justify-center rounded-full bg-white/10 p-3">
+            <ShieldCheck className="h-8 w-8 text-primary-foreground" />
+          </div>
+          <h2 className="text-3xl font-bold tracking-tight text-primary-foreground sm:text-4xl">
+            Siap Otomasi CS & Pahami Keuangan Bisnis Anda?
+          </h2>
+          <p className="mt-4 text-lg text-primary-foreground/80">
+            Bergabung dengan ratusan pelaku usaha Indonesia yang sudah
+            menggunakan Intara untuk melayani pelanggan lebih cepat dan
+            mengambil keputusan bisnis lebih cerdas.
+          </p>
+        </div>
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <a
             href="#"
             className="group inline-flex items-center gap-2 rounded-xl bg-cta px-8 py-4 text-base font-semibold text-cta-foreground shadow-lg transition hover:brightness-105"
           >
-            Buat AI Sekarang — Gratis
+            Coba Gratis Sekarang
             <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
           </a>
           <a
@@ -640,16 +911,20 @@ function Footer() {
               <span className="text-lg font-bold text-foreground">Intara</span>
             </div>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              Intelligence Nusantara — Platform AI chatbot no-code untuk UMKM
-              Indonesia.
+              Intelligence Nusantara — Super-App AI untuk UMKM Indonesia. CS
+              otomatis &amp; analisis bisnis cerdas dalam satu platform.
             </p>
           </div>
 
-          {/* Links */}
           <div>
             <h4 className="text-sm font-semibold text-foreground">Produk</h4>
             <ul className="mt-3 space-y-2">
-              {["Fitur", "Harga", "Integrasi", "Changelog"].map((l) => (
+              {[
+                "Chatbot CS",
+                "AI Analitik",
+                "Dashboard Keuangan",
+                "Integrasi",
+              ].map((l) => (
                 <li key={l}>
                   <a
                     href="#"
@@ -699,7 +974,6 @@ function Footer() {
           </div>
         </div>
 
-        {/* Bottom bar */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
           <p className="text-sm text-muted-foreground">
             &copy; {new Date().getFullYear()} Intara (Intelligence Nusantara).
