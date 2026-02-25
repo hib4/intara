@@ -10,6 +10,8 @@ import DashboardPage from "./pages/dashboard/DashboardPage.tsx";
 import AnalyticsChatPage from "./pages/dashboard/AnalyticsChatPage.tsx";
 import ChatbotManagementPage from "./pages/dashboard/ChatbotManagementPage.tsx";
 import BotBuilderPage from "./pages/dashboard/BotBuilderPage.tsx";
+import DataManagementPage from "./pages/dashboard/DataManagementPage.tsx";
+import DataUploadPage from "./pages/dashboard/DataUploadPage.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -23,6 +25,8 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/dashboard/analytics" element={<AnalyticsChatPage />} />
         <Route path="/dashboard/chatbot" element={<ChatbotManagementPage />} />
         <Route path="/dashboard/chatbot/new" element={<BotBuilderPage />} />
+        <Route path="/dashboard/data" element={<DataManagementPage />} />
+        <Route path="/dashboard/data/upload" element={<DataUploadPage />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
