@@ -13,6 +13,7 @@ import BotBuilderPage from "./pages/dashboard/BotBuilderPage.tsx";
 import DataManagementPage from "./pages/dashboard/DataManagementPage.tsx";
 import DataUploadPage from "./pages/dashboard/DataUploadPage.tsx";
 import SettingsPage from "./pages/dashboard/SettingsPage.tsx";
+import PublicChatPage from "./pages/chat/PublicChatPage.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -29,6 +30,7 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/dashboard/data" element={<DataManagementPage />} />
         <Route path="/dashboard/data/upload" element={<DataUploadPage />} />
         <Route path="/dashboard/settings" element={<SettingsPage />} />
+        <Route path="/chat/:botId" element={<PublicChatPage />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
