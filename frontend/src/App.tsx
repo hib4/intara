@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import intaraLogo from "./assets/intara.webp";
 import {
   AreaChart,
   Area,
@@ -98,12 +99,7 @@ function Navbar() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         {/* Logo */}
         <a href="#" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-            <Bot className="h-5 w-5 text-primary-foreground" />
-          </div>
-          <span className="text-xl font-bold tracking-tight text-foreground">
-            Intara
-          </span>
+          <img src={intaraLogo} alt="Intara" className="h-9 w-auto" />
         </a>
 
         {/* Desktop nav */}
@@ -906,10 +902,7 @@ function Footer() {
           {/* Brand */}
           <div className="md:col-span-1">
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                <Bot className="h-4 w-4 text-primary-foreground" />
-              </div>
-              <span className="text-lg font-bold text-foreground">Intara</span>
+              <img src={intaraLogo} alt="Intara" className="h-8 w-auto" />
             </div>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
               Intelligence Nusantara — Super-App AI untuk UMKM Indonesia. CS
