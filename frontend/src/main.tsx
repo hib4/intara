@@ -8,6 +8,8 @@ import RegisterPage from "./pages/auth/RegisterPage.tsx";
 import OnboardingPage from "./pages/onboarding/OnboardingPage.tsx";
 import DashboardPage from "./pages/dashboard/DashboardPage.tsx";
 import AnalyticsChatPage from "./pages/dashboard/AnalyticsChatPage.tsx";
+import ChatbotManagementPage from "./pages/dashboard/ChatbotManagementPage.tsx";
+import BotBuilderPage from "./pages/dashboard/BotBuilderPage.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -19,6 +21,8 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/onboarding" element={<OnboardingPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/dashboard/analytics" element={<AnalyticsChatPage />} />
+        <Route path="/dashboard/chatbot" element={<ChatbotManagementPage />} />
+        <Route path="/dashboard/chatbot/new" element={<BotBuilderPage />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
