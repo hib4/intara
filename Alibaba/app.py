@@ -204,7 +204,7 @@ def generate_proactive_insight(sales, inventory, ops, catatan_strategi: str) -> 
         "ops":       ops,
     }
     prompt = f"""
-Anda adalah PayBot, asisten keuangan bisnis yang proaktif.
+Anda adalah INTARA, asisten keuangan bisnis yang proaktif.
 
 Saat ini user baru membuka sesi. Tanpa perlu ditanya, berikan laporan singkat kondisi bisnis terkini.
 
@@ -243,7 +243,7 @@ def jalankan_analisis():
     history: list[dict] = []
 
     print("=" * 52)
-    print("   💼  PayBot Finance Advisor  (RAG + History)   ")
+    print("   💼  INTARA Finance Advisor  (RAG + History)   ")
     print("=" * 52)
     print("Perintah khusus:")
     print("  'exit'         → Keluar")
