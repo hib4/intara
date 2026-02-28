@@ -17,6 +17,7 @@ import app.db.models  # noqa: F401
 
 # ── Routers ──────────────────────────────────────────────────────────────
 from app.api.endpoints.auth import router as auth_router
+from app.api.endpoints.chatbots import router as chatbots_router
 
 
 # ---------------------------------------------------------------------------
@@ -58,6 +59,7 @@ app.add_middleware(
 # Routes
 # ---------------------------------------------------------------------------
 app.include_router(auth_router, prefix="/api")
+app.include_router(chatbots_router, prefix="/api")
 
 
 @app.get("/health", tags=["Health"])
