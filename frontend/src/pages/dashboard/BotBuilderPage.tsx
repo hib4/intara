@@ -275,7 +275,7 @@ function LivePreview({ botName }: { botName: string }) {
               <div className="flex justify-end">
                 <div className="max-w-[80%] rounded-2xl rounded-br-md bg-primary px-3.5 py-2.5 shadow-sm">
                   <p className="text-xs leading-relaxed text-white">
-                    Halo, bisa lihat daftar menu?
+                    Halo, bisa lihat katalog batik?
                   </p>
                 </div>
               </div>
@@ -287,18 +287,20 @@ function LivePreview({ botName }: { botName: string }) {
                 </div>
                 <div className="max-w-[80%] rounded-2xl rounded-bl-md border border-border/50 bg-white px-3.5 py-2.5 shadow-sm">
                   <p className="text-xs leading-relaxed text-foreground">
-                    Tentu, Kak! 😊 Berikut menu kami yang tersedia hari ini.
+                    Tentu, Kak! 😊 Berikut koleksi batik kami yang tersedia.
                     Silakan pilih kategori:
                   </p>
                   <div className="mt-2 flex flex-wrap gap-1.5">
-                    {["☕ Minuman", "🍰 Kue", "🍞 Roti"].map((cat) => (
-                      <span
-                        key={cat}
-                        className="rounded-full border border-primary/20 bg-primary/5 px-2.5 py-1 text-[10px] font-medium text-primary"
-                      >
-                        {cat}
-                      </span>
-                    ))}
+                    {["🎨 Batik Tulis", "📜 Batik Cap", "🧣 Selendang"].map(
+                      (cat) => (
+                        <span
+                          key={cat}
+                          className="rounded-full border border-primary/20 bg-primary/5 px-2.5 py-1 text-[10px] font-medium text-primary"
+                        >
+                          {cat}
+                        </span>
+                      ),
+                    )}
                   </div>
                 </div>
               </div>
@@ -442,7 +444,7 @@ export default function BotBuilderPage() {
                       </Label>
                       <Input
                         id="bot-name"
-                        placeholder="cth. CS Toko Kue Bunda"
+                        placeholder="cth. Asisten Batik Pak Wiryo"
                         className={cn(
                           "rounded-xl",
                           errors.name &&
@@ -468,7 +470,7 @@ export default function BotBuilderPage() {
                       </Label>
                       <Textarea
                         id="bot-persona"
-                        placeholder="cth. Jawab dengan ramah, gunakan sapaan 'Kak', fokus pada detail harga dan ketersediaan produk."
+                        placeholder="cth. Jawab dengan ramah, gunakan sapaan 'Kak', fokus pada detail motif, teknik pembuatan, dan harga batik."
                         className={cn(
                           "min-h-[100px] resize-none rounded-xl",
                           errors.persona &&

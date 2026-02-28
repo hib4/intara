@@ -50,31 +50,31 @@ interface ChartDataItem {
 
 /* ── Mock Chart Data ─────────────────────────── */
 const topProductsChart: ChartDataItem[] = [
-  { name: "Kopi Susu Literan", value: 347 },
-  { name: "Kue Lapis Legit", value: 284 },
-  { name: "Brownies Panggang", value: 196 },
+  { name: "Tulis Mega Mendung", value: 38 },
+  { name: "Cap Parang Rusak", value: 31 },
+  { name: "Tulis Sekar Jagad", value: 24 },
 ];
 
 /* ── Suggested Prompts ───────────────────────── */
 const suggestedPrompts = [
   {
     icon: <TrendingUp className="h-4 w-4" />,
-    text: "Bagaimana tren penjualan minggu ini?",
+    text: "Bagaimana tren penjualan batik minggu ini?",
     emoji: "📊",
   },
   {
     icon: <Package className="h-4 w-4" />,
-    text: "Produk apa yang stoknya menipis?",
+    text: "Stok kain mori atau pewarna apa yang menipis?",
     emoji: "📦",
   },
   {
     icon: <DollarSign className="h-4 w-4" />,
-    text: "Berapa total pengeluaran bulan ini?",
+    text: "Berapa total pengeluaran bahan baku bulan ini?",
     emoji: "💰",
   },
   {
     icon: <Sparkles className="h-4 w-4" />,
-    text: "Berikan insight bisnis hari ini",
+    text: "Berikan insight bisnis batik hari ini",
     emoji: "✨",
   },
 ];
@@ -291,13 +291,13 @@ export default function AnalyticsChatPage() {
           id: (Date.now() + 1).toString(),
           role: "ai",
           content:
-            "Tentu! Berikut adalah 3 produk paling laris di toko Anda bulan ini, menyumbang 45% dari total pendapatan:",
+            "Tentu! Berikut adalah 3 motif batik paling laris di workshop Anda bulan ini, menyumbang 58% dari total pendapatan:",
           chart: {
             data: topProductsChart,
-            title: "Produk Terlaris — Februari 2026",
+            title: "Motif Batik Terlaris — Februari 2026",
           },
           insight:
-            "💡 Rekomendasi: Tingkatkan stok Kopi Susu Literan karena permintaannya sedang tinggi. Pertimbangkan juga bundling dengan Kue Lapis Legit untuk meningkatkan average order value.",
+            "💡 Rekomendasi: Tingkatkan produksi Batik Tulis Mega Mendung karena permintaannya sedang tinggi. Pertimbangkan juga bundling dengan selendang batik untuk meningkatkan average order value.",
           timestamp: new Date(),
         };
       } else {
@@ -305,7 +305,7 @@ export default function AnalyticsChatPage() {
           id: (Date.now() + 1).toString(),
           role: "ai",
           content:
-            "Saya sedang menganalisis data bisnis Anda. Fitur ini akan terhubung dengan backend AI Intara untuk memberikan jawaban berdasarkan data real-time Anda. Saat ini, ini adalah preview interface-nya.",
+            "Saya sedang menganalisis data bisnis batik Anda. Fitur ini akan terhubung dengan backend AI Intara untuk memberikan jawaban berdasarkan data real-time Anda. Saat ini, ini adalah preview interface-nya.",
           timestamp: new Date(),
         };
       }
@@ -351,7 +351,7 @@ export default function AnalyticsChatPage() {
               </h1>
               <p className="text-xs text-muted-foreground">
                 Tanya apa saja tentang penjualan, pengeluaran, atau performa
-                toko Anda.
+                workshop batik Anda.
               </p>
             </div>
           </div>
@@ -402,7 +402,7 @@ export default function AnalyticsChatPage() {
                       </h2>
                       <p className="mt-1.5 text-sm text-muted-foreground">
                         Saya bisa membantu Anda memahami data penjualan,
-                        pengeluaran, dan performa bisnis Anda.
+                        pengeluaran, dan performa bisnis batik Anda.
                       </p>
                     </div>
                   )}
@@ -445,7 +445,7 @@ export default function AnalyticsChatPage() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Ketik pertanyaan tentang bisnis Anda di sini..."
+                placeholder="Ketik pertanyaan tentang bisnis batik Anda di sini..."
                 rows={1}
                 className={cn(
                   "w-full resize-none rounded-xl border border-border bg-slate-50/50 px-4 py-3 pr-4 text-sm text-foreground placeholder:text-muted-foreground",

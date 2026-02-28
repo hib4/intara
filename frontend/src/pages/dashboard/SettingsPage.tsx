@@ -85,6 +85,7 @@ type PasswordValues = z.infer<typeof passwordSchema>;
 
 /* ── Mock Data ───────────────────────────────── */
 const BUSINESS_CATEGORIES = [
+  "Kerajinan & Seni",
   "Makanan & Minuman",
   "Retail / Toko",
   "Jasa Profesional",
@@ -172,9 +173,9 @@ function ProfileTab() {
     resolver: zodResolver(profileSchema),
     mode: "onChange",
     defaultValues: {
-      businessName: "Toko Kue Manis",
-      category: "Makanan & Minuman",
-      email: "rina@tokokuemanis.id",
+      businessName: "Batik Tradisional Pak Wiryo",
+      category: "Kerajinan & Seni",
+      email: "wiryo@batikpakwiryo.id",
     },
   });
 
@@ -202,7 +203,7 @@ function ProfileTab() {
             <div className="group relative">
               <Avatar className="h-20 w-20 border-2 border-border/60">
                 <AvatarFallback className="bg-primary/10 text-xl font-bold text-primary">
-                  TK
+                  PW
                 </AvatarFallback>
               </Avatar>
               <button
@@ -231,7 +232,7 @@ function ProfileTab() {
             </Label>
             <Input
               id="business-name"
-              placeholder="cth. Toko Kue Bunda"
+              placeholder="cth. Batik Pak Wiryo"
               className={cn(
                 "rounded-xl",
                 errors.businessName &&
@@ -250,7 +251,7 @@ function ProfileTab() {
           <div className="space-y-2">
             <Label className="text-sm font-medium">Kategori Usaha</Label>
             <Select
-              defaultValue="Makanan & Minuman"
+              defaultValue="Kerajinan & Seni"
               onValueChange={(v) => setValue("category", v)}
             >
               <SelectTrigger className="rounded-xl">

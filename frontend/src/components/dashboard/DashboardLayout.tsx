@@ -141,16 +141,16 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               >
                 <Avatar className="h-8 w-8">
                   <AvatarFallback className="bg-primary/10 text-xs font-semibold text-primary">
-                    TK
+                    PW
                   </AvatarFallback>
                 </Avatar>
                 {!collapsed && (
                   <div className="min-w-0 flex-1 text-left">
                     <p className="truncate text-sm font-medium text-foreground">
-                      Toko Kue Manis
+                      Batik Tradisional Pak Wiryo
                     </p>
                     <p className="truncate text-xs text-muted-foreground">
-                      rina@tokokuemanis.id
+                      wiryo@batikpakwiryo.id
                     </p>
                   </div>
                 )}

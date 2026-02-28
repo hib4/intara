@@ -43,37 +43,37 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 /* ── Mock Data ───────────────────────────────── */
 const salesData = [
-  { day: "Sen", penjualan: 2800000, cashflow: 2400000 },
-  { day: "Sel", penjualan: 3200000, cashflow: 2900000 },
-  { day: "Rab", penjualan: 2600000, cashflow: 2300000 },
-  { day: "Kam", penjualan: 4100000, cashflow: 3600000 },
-  { day: "Jum", penjualan: 3800000, cashflow: 3300000 },
-  { day: "Sab", penjualan: 5200000, cashflow: 4500000 },
-  { day: "Min", penjualan: 4700000, cashflow: 4100000 },
+  { day: "Sen", penjualan: 4500000, cashflow: 3800000 },
+  { day: "Sel", penjualan: 5200000, cashflow: 4600000 },
+  { day: "Rab", penjualan: 3800000, cashflow: 3200000 },
+  { day: "Kam", penjualan: 6700000, cashflow: 5900000 },
+  { day: "Jum", penjualan: 6100000, cashflow: 5300000 },
+  { day: "Sab", penjualan: 8500000, cashflow: 7400000 },
+  { day: "Min", penjualan: 7200000, cashflow: 6300000 },
 ];
 
 const productData = [
-  { name: "Kue Lapis", jumlah: 142 },
-  { name: "Brownies", jumlah: 118 },
-  { name: "Nastar", jumlah: 96 },
-  { name: "Bolu Kukus", jumlah: 87 },
-  { name: "Donat", jumlah: 73 },
+  { name: "Tulis Mega Mendung", jumlah: 38 },
+  { name: "Cap Parang Rusak", jumlah: 31 },
+  { name: "Tulis Sekar Jagad", jumlah: 24 },
+  { name: "Cap Kawung", jumlah: 19 },
+  { name: "Tulis Sogan Solo", jumlah: 15 },
 ];
 
 const recentChats = [
   {
-    name: "Dina Safitri",
-    message: "Apakah kue lapisnya ready stock?",
+    name: "Rina Kartika",
+    message: "Batik tulis Mega Mendung warna biru masih ada?",
     time: "2 mnt lalu",
   },
   {
-    name: "Budi Hartono",
-    message: "Mau pesan brownies 3 box untuk besok",
+    name: "Agus Prasetyo",
+    message: "Mau pesan 5 lembar batik cap untuk seragam kantor",
     time: "15 mnt lalu",
   },
   {
-    name: "Sari Melani",
-    message: "Harga nastar per toples berapa ya?",
+    name: "Dewi Lestari",
+    message: "Bisa custom motif Sekar Jagad ukuran 2x1 meter?",
     time: "32 mnt lalu",
   },
 ];
@@ -81,19 +81,19 @@ const recentChats = [
 const aiInsights = [
   {
     icon: <TrendingUp className="h-4 w-4 text-emerald-600" />,
-    text: "Penjualan Kue Lapis naik 24% dibanding minggu lalu — pertimbangkan untuk menambah stok bahan baku.",
+    text: "Penjualan Batik Tulis Mega Mendung naik 32% dibanding minggu lalu — pertimbangkan untuk menambah stok kain mori dan lilin.",
     tag: "Penjualan",
     tagColor: "bg-emerald-50 text-emerald-700",
   },
   {
     icon: <ShoppingBag className="h-4 w-4 text-amber-600" />,
-    text: "Stok kemasan box Brownies diperkirakan habis dalam 3 hari. Segera lakukan pemesanan ulang.",
+    text: "Stok pewarna alam (indigo & soga) diperkirakan habis dalam 5 hari. Segera lakukan pemesanan ulang ke supplier.",
     tag: "Stok",
     tagColor: "bg-amber-50 text-amber-700",
   },
   {
     icon: <Lightbulb className="h-4 w-4 text-primary" />,
-    text: "Pelanggan paling sering bertanya tentang harga & ketersediaan. Tambahkan info ini ke knowledge base chatbot Anda.",
+    text: "Pelanggan paling sering bertanya tentang proses pembuatan & keaslian batik tulis. Tambahkan info ini ke knowledge base chatbot Anda.",
     tag: "Insight",
     tagColor: "bg-blue-50 text-primary",
   },
@@ -205,7 +205,7 @@ export default function DashboardPage() {
       <header className="flex shrink-0 items-center justify-between border-b border-border/60 bg-white px-8 py-5">
         <div>
           <h1 className="text-xl font-bold tracking-tight text-foreground">
-            Halo, Toko Kue Manis! 👋
+            Halo, Batik Pak Wiryo! 👋
           </h1>
           <p className="mt-0.5 text-sm text-muted-foreground">
             Berikut adalah ringkasan performa bisnis Anda hari ini.
@@ -221,7 +221,7 @@ export default function DashboardPage() {
           {/* Profile avatar */}
           <Avatar className="h-10 w-10 cursor-pointer ring-2 ring-primary/15">
             <AvatarFallback className="bg-primary text-sm font-bold text-primary-foreground">
-              TK
+              PW
             </AvatarFallback>
           </Avatar>
         </div>
@@ -242,26 +242,26 @@ export default function DashboardPage() {
           <StatCard
             title="Status Chatbot CS"
             value="Aktif"
-            subtitle="847 chat ditangani minggu ini"
+            subtitle="312 chat ditangani minggu ini"
             icon={<Bot className="h-5 w-5 text-primary" />}
             trend="up"
-            trendValue="+8.2%"
+            trendValue="+18.5%"
           />
           <StatCard
             title="Produk Terlaris"
-            value="Kue Lapis"
-            subtitle="142 terjual minggu ini"
+            value="Tulis Mega Mendung"
+            subtitle="38 terjual minggu ini"
             icon={<ShoppingBag className="h-5 w-5 text-primary" />}
             trend="up"
-            trendValue="+24%"
+            trendValue="+32%"
           />
           <StatCard
             title="Pertanyaan Pelanggan"
-            value="156"
+            value="89"
             subtitle="Dijawab otomatis oleh AI"
             icon={<MessageSquare className="h-5 w-5 text-primary" />}
             trend="up"
-            trendValue="+15%"
+            trendValue="+22%"
           />
         </div>
 

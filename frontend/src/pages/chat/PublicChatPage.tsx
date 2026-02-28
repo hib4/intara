@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, type KeyboardEvent } from "react";
-import { Send, Zap, Circle } from "lucide-react";
+import { Send, Zap, Circle, CreditCard, ShieldCheck } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,8 @@ interface Message {
   role: Role;
   text: string;
   time: string;
+  hasPayment?: boolean;
+  imageUrl?: string;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -29,37 +31,67 @@ function uid(): string {
   return Math.random().toString(36).slice(2, 9);
 }
 
-// ─── Mock initial conversation ────────────────────────────────────────────────
+// ─── Mock conversation in 3 staged prompts ───────────────────────────────────
 
-const INITIAL_MESSAGES: Message[] = [
+// Prompt 1: Welcome + user asks about best seller
+const PROMPT_1: Message[] = [
   {
     id: uid(),
     role: "ai",
-    text: "Halo! Selamat datang di Toko Kue Bunda. Saya asisten virtual Anda. Ada yang bisa saya bantu terkait menu atau pemesanan hari ini? 🎂",
-    time: "14:00",
+    text: "Halo! Selamat datang di Batik Tradisional Pak Wiryo. Saya asisten virtual Anda. Ada yang bisa saya bantu terkait koleksi batik atau pemesanan hari ini? 🎨",
+    time: "10:04",
   },
+];
+
+// Prompt 2: User question + AI recommendation with image
+const PROMPT_2: Message[] = [
   {
     id: uid(),
     role: "user",
-    text: "Halo, mau tanya harga Brownies Panggang ukuran medium berapa ya? Dan apakah bisa dikirim hari ini?",
-    time: "14:01",
+    text: "Halo, apa batik yang paling bagus dan best seller di sini?",
+    time: "10:05",
   },
   {
     id: uid(),
     role: "ai",
-    text: "Untuk Brownies Panggang Medium harganya Rp 65.000, Kak. Stok hari ini masih tersedia dan bisa dikirim menggunakan ojek online (Sameday/Instant) sebelum jam 15.00.\n\nMau dibantu catat pesanannya?",
-    time: "14:02",
+    text: "Halo Kak! Selamat datang di Batik Tradisional Pak Wiryo.\n\nBatik paling best seller kami saat ini adalah Batik Tulis Mega Mendung Premium. Harganya Rp\u00a0750.000, dibuat langsung oleh pengrajin lokal dengan pewarna alami yang sangat elegan.\n\nApakah Kakak tertarik untuk memesannya?",
+    time: "10:05",
+  },
+  {
+    id: uid(),
+    role: "ai",
+    text: "🖼️ Batik Tulis Mega Mendung Premium",
+    time: "10:05",
+    imageUrl:
+      "https://cdn-ilealle.nitrocdn.com/nWbsFnOuVXoKORnPXFTCZsDHIKzPYfgd/assets/images/optimized/rev-aeb1163/btbatiktrusmi.com/wp-content/uploads/2025/11/5.png",
+  },
+];
+
+// Prompt 3: User agrees to buy + AI checkout with PayLabs
+const PROMPT_3: Message[] = [
+  {
+    id: uid(),
+    role: "user",
+    text: "Wah bagus ya, boleh deh. Saya mau beli 1 potong yang itu ya.",
+    time: "10:06",
+  },
+  {
+    id: uid(),
+    role: "ai",
+    text: "Baik Kak, pesanan untuk 1 potong Batik Tulis Mega Mendung Premium (Rp\u00a0750.000) sudah saya siapkan.\n\nUntuk menyelesaikan pembelian, silakan klik tombol pembayaran di bawah ini. Transaksi Kakak diproses secara aman menggunakan PayLabs (Mendukung QRIS, e-Wallet, & Virtual Account).",
+    time: "10:06",
+    hasPayment: true,
   },
 ];
 
 // ─── Round-robin simulated AI responses ───────────────────────────────────────
 
 const AI_REPLIES = [
-  "Baik, Kak! Pesanan Brownies Panggang Medium sudah saya catat. Boleh minta nama dan alamat pengiriman lengkapnya?",
-  "Untuk metode pembayaran, kami menerima transfer bank, GoPay, OVO, dan COD ya, Kak. Mana yang Kakak pilih?",
-  "Terima kasih! Pesanan Kakak sedang kami proses. Estimasi pengiriman sekitar 30–60 menit setelah pembayaran dikonfirmasi. 🚀",
-  "Ada yang lain yang bisa saya bantu, Kak? Kami juga punya promo Buy 2 Get 1 untuk Cupcake Original hari ini! 🧁",
-  "Untuk info lengkap menu, Kakak bisa cek katalog kami di Instagram @kuebunda.id ya. Kami update setiap hari!",
+  "Tentu, Kak! Kami juga punya Batik Cap Parang Klasik seharga Rp\u00a0350.000 yang juga sangat populer. Mau saya tambahkan ke pesanan?",
+  "Untuk metode pembayaran, kami menerima transfer bank, QRIS, GoPay, OVO, dan COD ya, Kak. Mana yang Kakak pilih?",
+  "Terima kasih! Pesanan Kakak sedang kami proses. Estimasi pengiriman sekitar 2–3 hari kerja ke seluruh Indonesia. 🚀",
+  "Ada yang lain yang bisa saya bantu, Kak? Kami juga punya koleksi Batik Tulis Lasem Premium yang baru datang! 🎨",
+  "Untuk info lengkap koleksi, Kakak bisa cek katalog kami di Instagram @batikpakwiryo ya. Kami update setiap minggu!",
 ];
 
 let replyIndex = 0;
@@ -78,15 +110,45 @@ function AiBubble({ message }: BubbleProps) {
           className="text-[10px] font-bold text-white"
           style={{ backgroundColor: "#0258A3" }}
         >
-          KB
+          PW
         </AvatarFallback>
       </Avatar>
 
-      <div className="max-w-[80%]">
+      <div className="max-w-[80%] space-y-2">
+        {message.imageUrl && (
+          <div className="overflow-hidden rounded-2xl rounded-bl-sm shadow-sm">
+            <img
+              src={message.imageUrl}
+              alt={message.text}
+              className="h-48 w-full object-cover"
+              loading="lazy"
+            />
+          </div>
+        )}
         <div className="rounded-2xl rounded-bl-sm bg-slate-100 px-4 py-3 text-sm leading-relaxed text-slate-800 shadow-sm whitespace-pre-line">
           {message.text}
         </div>
-        <p className="mt-1 ml-1 text-[11px] text-slate-400">{message.time}</p>
+
+        {message.hasPayment && (
+          <>
+            <button
+              type="button"
+              onClick={() =>
+                window.alert("Redirecting to PayLabs Checkout Page...")
+              }
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-sm font-bold text-white shadow-md shadow-emerald-600/25 transition-all hover:bg-emerald-700 hover:shadow-lg hover:shadow-emerald-600/30 active:scale-[0.98]"
+            >
+              <CreditCard className="h-4 w-4" />
+              Bayar Sekarang via PayLabs
+            </button>
+            <div className="flex items-center justify-center gap-1 text-[10px] text-slate-400">
+              <ShieldCheck className="h-3 w-3" />
+              Transaksi aman &amp; terenkripsi
+            </div>
+          </>
+        )}
+
+        <p className="ml-1 text-[11px] text-slate-400">{message.time}</p>
       </div>
     </div>
   );
@@ -114,7 +176,7 @@ function TypingIndicator() {
           className="text-[10px] font-bold text-white"
           style={{ backgroundColor: "#0258A3" }}
         >
-          KB
+          PW
         </AvatarFallback>
       </Avatar>
       <div className="rounded-2xl rounded-bl-sm bg-slate-100 px-4 py-3 shadow-sm">
@@ -131,11 +193,14 @@ function TypingIndicator() {
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export default function PublicChatPage() {
-  const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES);
+  const [messages, setMessages] = useState<Message[]>(PROMPT_1);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [stage, setStage] = useState(1);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const STAGES = [PROMPT_1, PROMPT_2, PROMPT_3];
 
   // Auto-scroll on new messages or typing indicator change
   useEffect(() => {
@@ -143,8 +208,21 @@ export default function PublicChatPage() {
   }, [messages, isTyping]);
 
   const handleSend = () => {
+    if (isTyping) return;
+
+    // If there are staged prompts remaining, advance to the next stage
+    if (stage < STAGES.length) {
+      setIsTyping(true);
+      setTimeout(() => {
+        setIsTyping(false);
+        setMessages((prev) => [...prev, ...STAGES[stage]]);
+        setStage((s) => s + 1);
+      }, 1500);
+      return;
+    }
+
     const trimmed = input.trim();
-    if (!trimmed || isTyping) return;
+    if (!trimmed) return;
 
     const userMsg: Message = {
       id: uid(),
@@ -203,13 +281,13 @@ export default function PublicChatPage() {
         >
           <Avatar className="h-10 w-10 shrink-0 ring-2 ring-white/30">
             <AvatarFallback className="bg-white/20 text-sm font-bold text-white">
-              KB
+              PW
             </AvatarFallback>
           </Avatar>
 
           <div className="flex-1 overflow-hidden">
             <p className="truncate text-sm font-semibold leading-none text-white">
-              Asisten Toko Kue Bunda
+              Asisten Batik Tradisional Pak Wiryo
             </p>
             <p className="mt-1 flex items-center gap-1 text-[11px] text-blue-100">
               <Circle className="h-2 w-2 fill-emerald-400 text-emerald-400" />
@@ -281,7 +359,7 @@ export default function PublicChatPage() {
 
             <Button
               onClick={handleSend}
-              disabled={!input.trim() || isTyping}
+              disabled={isTyping}
               size="icon"
               className="h-9 w-9 shrink-0 rounded-full shadow-sm transition-transform active:scale-95 disabled:opacity-40"
               style={{ backgroundColor: "#0258A3" }}
