@@ -15,6 +15,9 @@ from app.db.database import engine
 # Import models so they are registered on Base.metadata
 import app.db.models  # noqa: F401
 
+# ── Routers ──────────────────────────────────────────────────────────────
+from app.api.endpoints.auth import router as auth_router
+
 
 # ---------------------------------------------------------------------------
 # Lifespan – runs once on startup / shutdown
@@ -54,6 +57,9 @@ app.add_middleware(
 # ---------------------------------------------------------------------------
 # Routes
 # ---------------------------------------------------------------------------
+app.include_router(auth_router, prefix="/api")
+
+
 @app.get("/health", tags=["Health"])
 def health_check():
     """Simple liveness probe."""

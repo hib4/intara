@@ -17,6 +17,10 @@ class Settings(BaseSettings):
     APP_NAME: str = "Intara API"
     DEBUG: bool = True
 
+    # ── Security / JWT ───────────────────────────────────────
+    SECRET_KEY: str = "change-me-to-a-long-random-string-in-production"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440  # 24 hours
+
     # ── CORS ─────────────────────────────────────────────────
     CORS_ORIGINS: list[str] = ["http://localhost:5173"]
 

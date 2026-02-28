@@ -1,0 +1,45 @@
+"""
+Password hashing and JWT token utilities.
+
+Uses bcrypt via passlib for password hashing and PyJWT for token creation.
+"""
+
+from datetime import datetime, timedelta, timezone
+
+import jwt
+from passlib.context import CryptContext
+
+from app.core.config import settings
+
+# ── Constants ────────────────────────────────────────────────────────────
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 24 hours – adjust per your needs
+
+# ── Password hashing ────────────────────────────────────────────────────
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """Return True if *plain_password* matches the stored bcrypt hash."""
+    return pwd_context.verify(plain_password, hashed_password)
+
+
+def get_password_hash(password: str) -> str:
+    """Return a bcrypt hash of *password*."""
+    return pwd_context.hash(password)
+
+
+# ── JWT token ────────────────────────────────────────────────────────────
+def create_access_token(
+    data: dict,
+    expires_delta: timedelta | None = None,
+) -> str:
+    """Create a signed JWT with an expiration claim."""
+    to_encode = data.copy()
+    expire = datetime.now(timezone.utc) + (
+        expires_delta
+        if expires_delta
+        else timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    )
+    to_encode.update({"exp": expire})
+    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
