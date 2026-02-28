@@ -1,0 +1,7 @@
+[
+  {"id": "P001", "stok_sekarang": 50, "status": "aman"},
+  {"id": "P002", "stok_sekarang": 150, "status": "berlebih"},
+  {"id": "P003", "stok_sekarang": 15, "status": "hampir habis"},
+  {"id": "P004", "stok_sekarang": 10, "status": "kritis"},
+  {"id": "P005", "stok_sekarang": 500, "status": "aman"}
+]

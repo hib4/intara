@@ -1,0 +1,38 @@
+[
+  {
+    "id": "P001",
+    "nama": "Kopi Susu Gula Aren",
+    "kategori": "Minuman",
+    "harga_jual": 22000,
+    "hpp": 9000,
+    "terjual_30_hari": 850,
+    "tren": "naik"
+  },
+  {
+    "id": "P002",
+    "nama": "Roti Bakar Cokelat",
+    "kategori": "Makanan",
+    "harga_jual": 12600,
+    "hpp": 11000,
+    "terjual_30_hari": 120,
+    "tren": "turun"
+  },
+  {
+    "id": "P003",
+    "nama": "Matcha Latte",
+    "kategori": "Minuman",
+    "harga_jual": 28000,
+    "hpp": 15000,
+    "terjual_30_hari": 310,
+    "tren": "stabil"
+  },
+  {
+    "id": "P004",
+    "nama": "Croissant Almond",
+    "kategori": "Makanan",
+    "harga_jual": 35000,
+    "hpp": 18000,
+    "terjual_30_hari": 420,
+    "tren": "naik"
+  }
+]
