@@ -1,0 +1,41 @@
+name: intara
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: intara-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: intara
+      POSTGRES_PASSWORD: intara_secret
+      POSTGRES_DB: intara
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U intara -d intara"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: intara-api:latest
+    container_name: intara-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app
+    environment:
+      - DATABASE_URL=postgresql://intara:intara_secret@db:5432/intara
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
