@@ -13,7 +13,7 @@ from app.core.config import settings
 from app.db.database import engine
 
 # Import models so they are registered on Base.metadata
-import app.db.models  # noqa: F401
+import app.db.models
 
 # ── Routers ──────────────────────────────────────────────────────────────
 from app.api.endpoints.auth import router as auth_router
