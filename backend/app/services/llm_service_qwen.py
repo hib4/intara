@@ -36,6 +36,7 @@ _INSTRUCTION_TEMPLATE = (
 # ChatQwen reads the API key from the ALIBABA_API_KEY environment variable.
 _llm = ChatQwen(
     model="qwen-plus-latest",
+    api_key=settings.ALIBABA_API_KEY,
     temperature=0.3,
     max_tokens=1024,
 )
