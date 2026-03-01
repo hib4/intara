@@ -32,7 +32,12 @@ class Settings(BaseSettings):
     CHUNK_OVERLAP: int = 200
 
     # ── CORS ─────────────────────────────────────────────────
-    CORS_ORIGINS: list[str] = ["http://localhost:5173"]
+    CORS_ORIGINS: list[str] = [
+        "http://localhost:5173",       
+        "http://localhost:3000",       
+        "https://intara.biz.id",       
+        "https://www.intara.biz.id"
+    ]
 
     model_config = {
         "env_file": ".env",
