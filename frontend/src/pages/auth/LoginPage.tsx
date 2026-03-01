@@ -4,16 +4,18 @@ import { z } from "zod/v4";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { AxiosError } from "axios";
 
 import { AuthLayout } from "@/components/auth/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAuth } from "@/context/AuthContext";
 
 /* ── Zod Schema ──────────────────────────────── */
 const loginSchema = z.object({
   email: z.email("Masukkan alamat email yang valid"),
-  password: z.string().min(1, "Kata sandi tidak boleh kosong"),
+  password: z.string().min(8, "Kata sandi minimal 8 karakter"),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -21,6 +23,8 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 /* ── Page Component ──────────────────────────── */
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const { login } = useAuth();
 
   const {
     register,
@@ -31,9 +35,20 @@ export default function LoginPage() {
     defaultValues: { email: "", password: "" },
   });
 
-  function onSubmit(data: LoginFormValues) {
-    // TODO: Connect to backend auth API
-    console.log("Login:", data);
+  async function onSubmit(data: LoginFormValues) {
+    try {
+      setApiError(null);
+      await login({ email: data.email, password: data.password });
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        const detail = err.response?.data?.detail;
+        setApiError(
+          typeof detail === "string" ? detail : "Email atau kata sandi salah.",
+        );
+      } else {
+        setApiError("Terjadi kesalahan. Silakan coba lagi.");
+      }
+    }
   }
 
   return (
@@ -54,6 +69,7 @@ export default function LoginPage() {
           variant="outline"
           type="button"
           className="h-11 w-full rounded-xl text-sm font-medium"
+          onClick={() => alert("Fitur ini akan segera tersedia")}
         >
           <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
             <path
@@ -87,6 +103,13 @@ export default function LoginPage() {
 
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          {/* API Error Banner */}
+          {apiError && (
+            <div className="rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
+              {apiError}
+            </div>
+          )}
+
           {/* Email */}
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>

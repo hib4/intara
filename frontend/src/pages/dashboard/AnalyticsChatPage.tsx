@@ -21,7 +21,6 @@ import {
   Loader2,
 } from "lucide-react";
 
-import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -337,149 +336,144 @@ export default function AnalyticsChatPage() {
   };
 
   return (
-    <DashboardLayout>
-      <div className="flex flex-1 flex-col overflow-hidden">
-        {/* ── Header ────────────────────────── */}
-        <header className="flex shrink-0 items-center justify-between border-b border-border/60 bg-white px-8 py-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
-              <BrainCircuit className="h-5 w-5 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-base font-bold tracking-tight text-foreground">
-                Asisten Analitik Bisnis
-              </h1>
-              <p className="text-xs text-muted-foreground">
-                Tanya apa saja tentang penjualan, pengeluaran, atau performa
-                workshop batik Anda.
-              </p>
-            </div>
+    <div className="flex flex-1 flex-col overflow-hidden">
+      {/* ── Header ────────────────────────── */}
+      <header className="flex shrink-0 items-center justify-between border-b border-border/60 bg-white px-8 py-4">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+            <BrainCircuit className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-base font-bold tracking-tight text-foreground">
+              Asisten Analitik Bisnis
+            </h1>
+            <p className="text-xs text-muted-foreground">
+              Tanya apa saja tentang penjualan, pengeluaran, atau performa
+              workshop batik Anda.
+            </p>
+          </div>
+        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={clearChat}
+          className="gap-2 text-muted-foreground hover:text-destructive"
+        >
+          <Trash2 className="h-4 w-4" />
+          Hapus Chat
+        </Button>
+      </header>
+
+      {/* ── Chat Area ─────────────────────── */}
+      <ScrollArea ref={scrollRef} className="min-h-0 flex-1 bg-slate-50">
+        <div
+          className={cn(
+            "mx-auto max-w-3xl px-6 py-6",
+            messages.length === 0 &&
+              "flex min-h-full flex-col items-center justify-center",
+          )}
+        >
+          {/* Messages */}
+          <div className="space-y-6">
+            {messages.map((msg) =>
+              msg.role === "user" ? (
+                <UserBubble key={msg.id} message={msg} />
+              ) : (
+                <AIBubble key={msg.id} message={msg} />
+              ),
+            )}
+            {isTyping && <TypingIndicator />}
+          </div>
+
+          {/* Suggested Prompts (show when empty or after last AI message) */}
+          {!isTyping &&
+            (messages.length === 0 ||
+              messages[messages.length - 1]?.role === "ai") && (
+              <div className={messages.length === 0 ? "mt-0" : "mt-6"}>
+                {messages.length === 0 && (
+                  <div className="mb-8 text-center">
+                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
+                      <BrainCircuit className="h-8 w-8 text-primary" />
+                    </div>
+                    <h2 className="text-lg font-bold text-foreground">
+                      Halo! 👋 Saya Asisten Analitik Intara
+                    </h2>
+                    <p className="mt-1.5 text-sm text-muted-foreground">
+                      Saya bisa membantu Anda memahami data penjualan,
+                      pengeluaran, dan performa bisnis batik Anda.
+                    </p>
+                  </div>
+                )}
+                <p className="mb-3 text-center text-xs font-medium text-muted-foreground">
+                  {messages.length === 0
+                    ? "Mulai dengan salah satu pertanyaan:"
+                    : "Coba tanyakan:"}
+                </p>
+                <div
+                  className={cn(
+                    "flex flex-wrap gap-2",
+                    messages.length === 0 && "justify-center",
+                  )}
+                >
+                  {suggestedPrompts.map((prompt, i) => (
+                    <button
+                      key={i}
+                      onClick={() => handlePromptClick(prompt.text)}
+                      className="group inline-flex items-center gap-2 rounded-xl border border-border/60 bg-white px-4 py-2.5 text-xs font-medium text-foreground shadow-sm transition-all hover:border-primary/40 hover:bg-primary/5 hover:shadow-md"
+                    >
+                      <span>{prompt.emoji}</span>
+                      {prompt.text}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+        </div>
+      </ScrollArea>
+
+      {/* ── Input Area ────────────────────── */}
+      <div className="shrink-0 border-t border-border/60 bg-white px-6 pb-4 pt-4">
+        <form onSubmit={handleSubmit} className="mx-auto flex max-w-3xl gap-3">
+          <div className="relative flex-1">
+            <textarea
+              ref={inputRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Ketik pertanyaan tentang bisnis batik Anda di sini..."
+              rows={1}
+              className={cn(
+                "w-full resize-none rounded-xl border border-border bg-slate-50/50 px-4 py-3 pr-4 text-sm text-foreground placeholder:text-muted-foreground",
+                "focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20",
+                "transition-all",
+              )}
+              style={{ minHeight: 48, maxHeight: 120 }}
+              onInput={(e) => {
+                const target = e.target as HTMLTextAreaElement;
+                target.style.height = "auto";
+                target.style.height = `${Math.min(target.scrollHeight, 120)}px`;
+              }}
+            />
           </div>
           <Button
-            variant="ghost"
-            size="sm"
-            onClick={clearChat}
-            className="gap-2 text-muted-foreground hover:text-destructive"
+            type="submit"
+            disabled={!input.trim() || isTyping}
+            className="h-12 w-12 shrink-0 rounded-xl bg-cta text-cta-foreground shadow-md shadow-cta/20 transition hover:brightness-105 disabled:opacity-40 disabled:shadow-none"
+            size="icon"
           >
-            <Trash2 className="h-4 w-4" />
-            Hapus Chat
-          </Button>
-        </header>
-
-        {/* ── Chat Area ─────────────────────── */}
-        <ScrollArea ref={scrollRef} className="min-h-0 flex-1 bg-slate-50">
-          <div
-            className={cn(
-              "mx-auto max-w-3xl px-6 py-6",
-              messages.length === 0 &&
-                "flex min-h-full flex-col items-center justify-center",
+            {isTyping ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : (
+              <Send className="h-5 w-5" />
             )}
-          >
-            {/* Messages */}
-            <div className="space-y-6">
-              {messages.map((msg) =>
-                msg.role === "user" ? (
-                  <UserBubble key={msg.id} message={msg} />
-                ) : (
-                  <AIBubble key={msg.id} message={msg} />
-                ),
-              )}
-              {isTyping && <TypingIndicator />}
-            </div>
+          </Button>
+        </form>
 
-            {/* Suggested Prompts (show when empty or after last AI message) */}
-            {!isTyping &&
-              (messages.length === 0 ||
-                messages[messages.length - 1]?.role === "ai") && (
-                <div className={messages.length === 0 ? "mt-0" : "mt-6"}>
-                  {messages.length === 0 && (
-                    <div className="mb-8 text-center">
-                      <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
-                        <BrainCircuit className="h-8 w-8 text-primary" />
-                      </div>
-                      <h2 className="text-lg font-bold text-foreground">
-                        Halo! 👋 Saya Asisten Analitik Intara
-                      </h2>
-                      <p className="mt-1.5 text-sm text-muted-foreground">
-                        Saya bisa membantu Anda memahami data penjualan,
-                        pengeluaran, dan performa bisnis batik Anda.
-                      </p>
-                    </div>
-                  )}
-                  <p className="mb-3 text-center text-xs font-medium text-muted-foreground">
-                    {messages.length === 0
-                      ? "Mulai dengan salah satu pertanyaan:"
-                      : "Coba tanyakan:"}
-                  </p>
-                  <div
-                    className={cn(
-                      "flex flex-wrap gap-2",
-                      messages.length === 0 && "justify-center",
-                    )}
-                  >
-                    {suggestedPrompts.map((prompt, i) => (
-                      <button
-                        key={i}
-                        onClick={() => handlePromptClick(prompt.text)}
-                        className="group inline-flex items-center gap-2 rounded-xl border border-border/60 bg-white px-4 py-2.5 text-xs font-medium text-foreground shadow-sm transition-all hover:border-primary/40 hover:bg-primary/5 hover:shadow-md"
-                      >
-                        <span>{prompt.emoji}</span>
-                        {prompt.text}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-          </div>
-        </ScrollArea>
-
-        {/* ── Input Area ────────────────────── */}
-        <div className="shrink-0 border-t border-border/60 bg-white px-6 pb-4 pt-4">
-          <form
-            onSubmit={handleSubmit}
-            className="mx-auto flex max-w-3xl gap-3"
-          >
-            <div className="relative flex-1">
-              <textarea
-                ref={inputRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Ketik pertanyaan tentang bisnis batik Anda di sini..."
-                rows={1}
-                className={cn(
-                  "w-full resize-none rounded-xl border border-border bg-slate-50/50 px-4 py-3 pr-4 text-sm text-foreground placeholder:text-muted-foreground",
-                  "focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20",
-                  "transition-all",
-                )}
-                style={{ minHeight: 48, maxHeight: 120 }}
-                onInput={(e) => {
-                  const target = e.target as HTMLTextAreaElement;
-                  target.style.height = "auto";
-                  target.style.height = `${Math.min(target.scrollHeight, 120)}px`;
-                }}
-              />
-            </div>
-            <Button
-              type="submit"
-              disabled={!input.trim() || isTyping}
-              className="h-12 w-12 shrink-0 rounded-xl bg-cta text-cta-foreground shadow-md shadow-cta/20 transition hover:brightness-105 disabled:opacity-40 disabled:shadow-none"
-              size="icon"
-            >
-              {isTyping ? (
-                <Loader2 className="h-5 w-5 animate-spin" />
-              ) : (
-                <Send className="h-5 w-5" />
-              )}
-            </Button>
-          </form>
-
-          {/* Disclaimer */}
-          <p className="mx-auto mt-3 max-w-3xl text-center text-[11px] text-muted-foreground">
-            AI dapat membuat kesalahan. Harap periksa kembali data sensitif.
-          </p>
-        </div>
+        {/* Disclaimer */}
+        <p className="mx-auto mt-3 max-w-3xl text-center text-[11px] text-muted-foreground">
+          AI dapat membuat kesalahan. Harap periksa kembali data sensitif.
+        </p>
       </div>
-    </DashboardLayout>
+    </div>
   );
 }

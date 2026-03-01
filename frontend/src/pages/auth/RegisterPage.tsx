@@ -3,17 +3,32 @@ import { useForm } from "react-hook-form";
 import { z } from "zod/v4";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "react-router-dom";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2, CheckCircle2 } from "lucide-react";
+import { AxiosError } from "axios";
 
 import { AuthLayout } from "@/components/auth/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { registerUser } from "@/services/auth.service";
+import { useAuth } from "@/context/AuthContext";
+
+/* ── Business Categories ─────────────────────── */
+const BUSINESS_CATEGORIES = [
+  "Kerajinan & Seni",
+  "Makanan & Minuman",
+  "Retail / Toko",
+  "Jasa Profesional",
+  "Kesehatan & Kecantikan",
+  "Pendidikan & Kursus",
+  "Teknologi & Digital",
+  "Lainnya",
+];
 
 /* ── Zod Schema ──────────────────────────────── */
 const registerSchema = z.object({
-  fullName: z.string().min(1, "Nama lengkap tidak boleh kosong"),
   businessName: z.string().min(1, "Nama bisnis tidak boleh kosong"),
+  businessCategory: z.string().min(1, "Pilih kategori bisnis"),
   email: z.email("Masukkan alamat email yang valid"),
   password: z.string().min(8, "Kata sandi minimal 8 karakter"),
 });
@@ -23,6 +38,9 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 /* ── Page Component ──────────────────────────── */
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+  const { login } = useAuth();
 
   const {
     register,
@@ -30,12 +48,38 @@ export default function RegisterPage() {
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
-    defaultValues: { fullName: "", businessName: "", email: "", password: "" },
+    defaultValues: {
+      businessName: "",
+      businessCategory: "",
+      email: "",
+      password: "",
+    },
   });
 
-  function onSubmit(data: RegisterFormValues) {
-    // TODO: Connect to backend registration API
-    console.log("Register:", data);
+  async function onSubmit(data: RegisterFormValues) {
+    try {
+      setApiError(null);
+      await registerUser({
+        email: data.email,
+        password: data.password,
+        business_name: data.businessName,
+        business_category: data.businessCategory,
+      });
+      setSuccess(true);
+      // Auto-login and redirect to dashboard
+      await login({ email: data.email, password: data.password });
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        const detail = err.response?.data?.detail;
+        setApiError(
+          typeof detail === "string"
+            ? detail
+            : "Pendaftaran gagal. Silakan coba lagi.",
+        );
+      } else {
+        setApiError("Terjadi kesalahan. Silakan coba lagi.");
+      }
+    }
   }
 
   return (
@@ -56,6 +100,7 @@ export default function RegisterPage() {
           variant="outline"
           type="button"
           className="h-11 w-full rounded-xl text-sm font-medium"
+          onClick={() => alert("Fitur ini akan segera tersedia")}
         >
           <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
             <path
@@ -89,24 +134,20 @@ export default function RegisterPage() {
 
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-          {/* Full Name */}
-          <div className="space-y-2">
-            <Label htmlFor="fullName">Nama Lengkap</Label>
-            <Input
-              id="fullName"
-              type="text"
-              placeholder="Contoh: Rina Andayani"
-              autoComplete="name"
-              className="h-11 rounded-xl"
-              aria-invalid={!!errors.fullName}
-              {...register("fullName")}
-            />
-            {errors.fullName && (
-              <p className="text-xs text-destructive">
-                {errors.fullName.message}
-              </p>
-            )}
-          </div>
+          {/* Success Banner */}
+          {success && (
+            <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+              <CheckCircle2 className="h-4 w-4 shrink-0" />
+              Pendaftaran berhasil! Mengalihkan ke halaman login...
+            </div>
+          )}
+
+          {/* API Error Banner */}
+          {apiError && (
+            <div className="rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
+              {apiError}
+            </div>
+          )}
 
           {/* Business Name */}
           <div className="space-y-2">
@@ -114,7 +155,7 @@ export default function RegisterPage() {
             <Input
               id="businessName"
               type="text"
-              placeholder="Contoh: Toko Kue Manis Nusantara"
+              placeholder="Contoh: Batik Tradisional Pak Wiryo"
               autoComplete="organization"
               className="h-11 rounded-xl"
               aria-invalid={!!errors.businessName}
@@ -123,6 +164,31 @@ export default function RegisterPage() {
             {errors.businessName && (
               <p className="text-xs text-destructive">
                 {errors.businessName.message}
+              </p>
+            )}
+          </div>
+
+          {/* Business Category */}
+          <div className="space-y-2">
+            <Label htmlFor="businessCategory">Kategori Bisnis</Label>
+            <select
+              id="businessCategory"
+              className="flex h-11 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              aria-invalid={!!errors.businessCategory}
+              {...register("businessCategory")}
+            >
+              <option value="" disabled>
+                Pilih kategori...
+              </option>
+              {BUSINESS_CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+            {errors.businessCategory && (
+              <p className="text-xs text-destructive">
+                {errors.businessCategory.message}
               </p>
             )}
           </div>

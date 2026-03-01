@@ -18,7 +18,6 @@ import {
   ExternalLink,
 } from "lucide-react";
 
-import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -396,54 +395,52 @@ export default function ChatbotManagementPage() {
   const isEmpty = bots.length === 0;
 
   return (
-    <DashboardLayout>
-      <div className="flex flex-1 flex-col overflow-hidden">
-        {/* ── Header ────────────────────────── */}
-        <header className="flex shrink-0 items-start justify-between border-b border-border/60 bg-white px-8 py-5">
-          <div>
-            <h1 className="text-lg font-bold tracking-tight text-foreground">
-              Manajemen Chatbot CS
-            </h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Kelola asisten virtual Anda, atur pengetahuan dasar, dan bagikan
-              tautan ke pelanggan.
-            </p>
-          </div>
-          <Button
-            className="gap-2 rounded-xl bg-cta px-5 text-sm font-bold text-cta-foreground shadow-md shadow-cta/20 transition hover:brightness-105"
-            onClick={handleCreate}
-          >
-            <Plus className="h-4 w-4" />
-            Buat Chatbot Baru
-          </Button>
-        </header>
-
-        {/* ── Content ───────────────────────── */}
-        <div className="flex-1 overflow-y-auto bg-slate-50 px-8 py-6">
-          {isEmpty ? (
-            <EmptyState onCreate={handleCreate} />
-          ) : (
-            <>
-              {/* Summary bar */}
-              <div className="mb-6 flex items-center gap-4">
-                <p className="text-sm text-muted-foreground">
-                  Menampilkan{" "}
-                  <span className="font-semibold text-foreground">
-                    {bots.length}
-                  </span>{" "}
-                  chatbot aktif
-                </p>
-              </div>
-
-              {/* Bot Grid */}
-              <div className="grid gap-5 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
-                {bots.map((bot) => (
-                  <ChatbotCard key={bot.id} bot={bot} onShare={handleShare} />
-                ))}
-              </div>
-            </>
-          )}
+    <div className="flex flex-1 flex-col overflow-hidden">
+      {/* ── Header ────────────────────────── */}
+      <header className="flex shrink-0 items-start justify-between border-b border-border/60 bg-white px-8 py-5">
+        <div>
+          <h1 className="text-lg font-bold tracking-tight text-foreground">
+            Manajemen Chatbot CS
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Kelola asisten virtual Anda, atur pengetahuan dasar, dan bagikan
+            tautan ke pelanggan.
+          </p>
         </div>
+        <Button
+          className="gap-2 rounded-xl bg-cta px-5 text-sm font-bold text-cta-foreground shadow-md shadow-cta/20 transition hover:brightness-105"
+          onClick={handleCreate}
+        >
+          <Plus className="h-4 w-4" />
+          Buat Chatbot Baru
+        </Button>
+      </header>
+
+      {/* ── Content ───────────────────────── */}
+      <div className="flex-1 overflow-y-auto bg-slate-50 px-8 py-6">
+        {isEmpty ? (
+          <EmptyState onCreate={handleCreate} />
+        ) : (
+          <>
+            {/* Summary bar */}
+            <div className="mb-6 flex items-center gap-4">
+              <p className="text-sm text-muted-foreground">
+                Menampilkan{" "}
+                <span className="font-semibold text-foreground">
+                  {bots.length}
+                </span>{" "}
+                chatbot aktif
+              </p>
+            </div>
+
+            {/* Bot Grid */}
+            <div className="grid gap-5 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+              {bots.map((bot) => (
+                <ChatbotCard key={bot.id} bot={bot} onShare={handleShare} />
+              ))}
+            </div>
+          </>
+        )}
       </div>
 
       {/* Share Dialog */}
@@ -452,6 +449,6 @@ export default function ChatbotManagementPage() {
         onOpenChange={setShareOpen}
         bot={shareBot}
       />
-    </DashboardLayout>
+    </div>
   );
 }

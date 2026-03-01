@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
+import intaraLogo from "@/assets/intara.webp";
 import {
-  Bot,
   LayoutDashboard,
   BrainCircuit,
   MessageSquare,
@@ -62,12 +63,9 @@ const navItems: NavItem[] = [
   },
 ];
 
-interface DashboardLayoutProps {
-  children: React.ReactNode;
-}
-
-export default function DashboardLayout({ children }: DashboardLayoutProps) {
+export default function DashboardLayout() {
   const location = useLocation();
+  const { logout } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
 
   return (
@@ -81,8 +79,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       >
         {/* Brand */}
         <div className="flex h-16 items-center gap-2.5 border-b border-border/60 px-5">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary">
-            <Bot className="h-5 w-5 text-primary-foreground" />
+          <div className="flex shrink-0 items-center justify-center">
+            <img src={intaraLogo} alt="Intara" className="h-9 w-auto" />
           </div>
           {!collapsed && (
             <span className="text-lg font-bold tracking-tight text-foreground">
@@ -166,7 +164,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 Pengaturan
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-destructive">
+              <DropdownMenuItem className="text-destructive" onClick={logout}>
                 <LogOut className="mr-2 h-4 w-4" />
                 Keluar
               </DropdownMenuItem>
@@ -191,7 +189,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       </aside>
 
       {/* ── Main Area ───────────────────────── */}
-      <div className="flex flex-1 flex-col overflow-hidden">{children}</div>
+      <div className="flex flex-1 flex-col overflow-hidden">
+        <Outlet />
+      </div>
     </div>
   );
 }

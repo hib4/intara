@@ -24,7 +24,6 @@ import {
   Plus,
 } from "lucide-react";
 
-import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -200,7 +199,7 @@ export default function DashboardPage() {
   const totalRevenue = salesData.reduce((sum, d) => sum + d.penjualan, 0);
 
   return (
-    <DashboardLayout>
+    <>
       {/* ── Top Header ──────────────────────── */}
       <header className="flex shrink-0 items-center justify-between border-b border-border/60 bg-white px-8 py-5">
         <div>
@@ -574,7 +573,7 @@ export default function DashboardPage() {
         {/* Bottom spacing */}
         <div className="h-6" />
       </main>
-    </DashboardLayout>
+    </>
   );
 }
 

@@ -19,7 +19,6 @@ import {
   Receipt,
 } from "lucide-react";
 
-import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -665,67 +664,65 @@ export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState("profile");
 
   return (
-    <DashboardLayout>
-      <div className="flex flex-1 flex-col overflow-hidden">
-        {/* ── Header ────────────────────────── */}
-        <header className="shrink-0 border-b border-border/60 bg-white px-8 py-5">
-          <h1 className="text-lg font-bold tracking-tight text-foreground">
-            Pengaturan & Tagihan
-          </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Kelola profil bisnis, keamanan akun, dan paket langganan Anda.
-          </p>
-        </header>
+    <div className="flex flex-1 flex-col overflow-hidden">
+      {/* ── Header ────────────────────────── */}
+      <header className="shrink-0 border-b border-border/60 bg-white px-8 py-5">
+        <h1 className="text-lg font-bold tracking-tight text-foreground">
+          Pengaturan & Tagihan
+        </h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Kelola profil bisnis, keamanan akun, dan paket langganan Anda.
+        </p>
+      </header>
 
-        {/* ── Content ───────────────────────── */}
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain bg-slate-50 px-8 py-6">
-          <Tabs
-            value={activeTab}
-            onValueChange={setActiveTab}
-            className="mx-auto max-w-3xl"
-          >
-            {/* Tab Triggers */}
-            <TabsList className="mb-6 h-11 rounded-xl bg-slate-100 p-1">
-              <TabsTrigger
-                value="profile"
-                className="gap-2 rounded-lg px-5 text-sm font-semibold data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm"
-              >
-                <Building2 className="h-4 w-4" />
-                Profil Usaha
-              </TabsTrigger>
-              <TabsTrigger
-                value="security"
-                className="gap-2 rounded-lg px-5 text-sm font-semibold data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm"
-              >
-                <Shield className="h-4 w-4" />
-                Keamanan
-              </TabsTrigger>
-              <TabsTrigger
-                value="billing"
-                className="gap-2 rounded-lg px-5 text-sm font-semibold data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm"
-              >
-                <CreditCard className="h-4 w-4" />
-                Paket & Tagihan
-              </TabsTrigger>
-            </TabsList>
+      {/* ── Content ───────────────────────── */}
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain bg-slate-50 px-8 py-6">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="mx-auto max-w-3xl"
+        >
+          {/* Tab Triggers */}
+          <TabsList className="mb-6 h-11 rounded-xl bg-slate-100 p-1">
+            <TabsTrigger
+              value="profile"
+              className="gap-2 rounded-lg px-5 text-sm font-semibold data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm"
+            >
+              <Building2 className="h-4 w-4" />
+              Profil Usaha
+            </TabsTrigger>
+            <TabsTrigger
+              value="security"
+              className="gap-2 rounded-lg px-5 text-sm font-semibold data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm"
+            >
+              <Shield className="h-4 w-4" />
+              Keamanan
+            </TabsTrigger>
+            <TabsTrigger
+              value="billing"
+              className="gap-2 rounded-lg px-5 text-sm font-semibold data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm"
+            >
+              <CreditCard className="h-4 w-4" />
+              Paket & Tagihan
+            </TabsTrigger>
+          </TabsList>
 
-            {/* Tab: Profil Usaha */}
-            <TabsContent value="profile" className="mt-0">
-              <ProfileTab />
-            </TabsContent>
+          {/* Tab: Profil Usaha */}
+          <TabsContent value="profile" className="mt-0">
+            <ProfileTab />
+          </TabsContent>
 
-            {/* Tab: Keamanan */}
-            <TabsContent value="security" className="mt-0">
-              <SecurityTab />
-            </TabsContent>
+          {/* Tab: Keamanan */}
+          <TabsContent value="security" className="mt-0">
+            <SecurityTab />
+          </TabsContent>
 
-            {/* Tab: Paket & Tagihan */}
-            <TabsContent value="billing" className="mt-0">
-              <BillingTab />
-            </TabsContent>
-          </Tabs>
-        </div>
+          {/* Tab: Paket & Tagihan */}
+          <TabsContent value="billing" className="mt-0">
+            <BillingTab />
+          </TabsContent>
+        </Tabs>
       </div>
-    </DashboardLayout>
+    </div>
   );
 }

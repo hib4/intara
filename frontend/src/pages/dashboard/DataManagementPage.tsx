@@ -13,7 +13,6 @@ import {
   Upload,
 } from "lucide-react";
 
-import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -387,99 +386,97 @@ export default function DataManagementPage() {
   };
 
   return (
-    <DashboardLayout>
-      <div className="flex flex-1 flex-col overflow-hidden">
-        {/* ── Header ────────────────────────── */}
-        <header className="flex shrink-0 items-start justify-between border-b border-border/60 bg-white px-8 py-5">
-          <div>
-            <h1 className="text-lg font-bold tracking-tight text-foreground">
-              Pusat Data & Pengetahuan
-            </h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Kelola dokumen katalog untuk Asisten CS dan data transaksi untuk
-              Asisten Analitik Anda.
-            </p>
-          </div>
-          <Button
-            className="gap-2 rounded-xl bg-cta px-5 text-sm font-bold text-cta-foreground shadow-md shadow-cta/20 transition hover:brightness-105"
-            onClick={handleUpload}
-          >
-            <CloudUpload className="h-4 w-4" />
-            Unggah Data Baru
-          </Button>
-        </header>
-
-        {/* ── Content ───────────────────────── */}
-        <div className="min-h-0 flex-1 overflow-y-auto bg-slate-50 px-8 py-6">
-          <Tabs
-            value={activeTab}
-            onValueChange={setActiveTab}
-            className="mx-auto max-w-6xl"
-          >
-            {/* Tab Triggers */}
-            <TabsList className="mb-6 h-11 rounded-xl bg-slate-100 p-1">
-              <TabsTrigger
-                value="documents"
-                className="gap-2 rounded-lg px-5 text-sm font-semibold data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm"
-              >
-                <FileText className="h-4 w-4" />
-                Dokumen Chatbot (PDF/TXT)
-              </TabsTrigger>
-              <TabsTrigger
-                value="transactions"
-                className="gap-2 rounded-lg px-5 text-sm font-semibold data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm"
-              >
-                <FileSpreadsheet className="h-4 w-4" />
-                Data Transaksi (CSV/Excel)
-              </TabsTrigger>
-            </TabsList>
-
-            {/* Tab 1: Documents */}
-            <TabsContent value="documents" className="mt-0">
-              {documents.length > 0 ? (
-                <>
-                  <TabSummary
-                    totalFiles={documents.length}
-                    totalSyncing={
-                      documents.filter((f) => f.status === "syncing").length
-                    }
-                  />
-                  <DataTable files={documents} />
-                </>
-              ) : (
-                <EmptyState
-                  icon={FolderOpen}
-                  title="Belum ada dokumen yang diunggah"
-                  description="Unggah file PDF, TXT, atau DOCX sebagai sumber pengetahuan untuk chatbot Asisten CS Anda."
-                  onUpload={handleUpload}
-                />
-              )}
-            </TabsContent>
-
-            {/* Tab 2: Transactions */}
-            <TabsContent value="transactions" className="mt-0">
-              {transactions.length > 0 ? (
-                <>
-                  <TabSummary
-                    totalFiles={transactions.length}
-                    totalSyncing={
-                      transactions.filter((f) => f.status === "syncing").length
-                    }
-                  />
-                  <DataTable files={transactions} />
-                </>
-              ) : (
-                <EmptyState
-                  icon={Database}
-                  title="Belum ada data transaksi yang diunggah"
-                  description="Unggah file CSV atau Excel berisi data penjualan, pengeluaran, atau stok untuk Asisten Analitik Anda."
-                  onUpload={handleUpload}
-                />
-              )}
-            </TabsContent>
-          </Tabs>
+    <div className="flex flex-1 flex-col overflow-hidden">
+      {/* ── Header ────────────────────────── */}
+      <header className="flex shrink-0 items-start justify-between border-b border-border/60 bg-white px-8 py-5">
+        <div>
+          <h1 className="text-lg font-bold tracking-tight text-foreground">
+            Pusat Data & Pengetahuan
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Kelola dokumen katalog untuk Asisten CS dan data transaksi untuk
+            Asisten Analitik Anda.
+          </p>
         </div>
+        <Button
+          className="gap-2 rounded-xl bg-cta px-5 text-sm font-bold text-cta-foreground shadow-md shadow-cta/20 transition hover:brightness-105"
+          onClick={handleUpload}
+        >
+          <CloudUpload className="h-4 w-4" />
+          Unggah Data Baru
+        </Button>
+      </header>
+
+      {/* ── Content ───────────────────────── */}
+      <div className="min-h-0 flex-1 overflow-y-auto bg-slate-50 px-8 py-6">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="mx-auto max-w-6xl"
+        >
+          {/* Tab Triggers */}
+          <TabsList className="mb-6 h-11 rounded-xl bg-slate-100 p-1">
+            <TabsTrigger
+              value="documents"
+              className="gap-2 rounded-lg px-5 text-sm font-semibold data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm"
+            >
+              <FileText className="h-4 w-4" />
+              Dokumen Chatbot (PDF/TXT)
+            </TabsTrigger>
+            <TabsTrigger
+              value="transactions"
+              className="gap-2 rounded-lg px-5 text-sm font-semibold data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm"
+            >
+              <FileSpreadsheet className="h-4 w-4" />
+              Data Transaksi (CSV/Excel)
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Tab 1: Documents */}
+          <TabsContent value="documents" className="mt-0">
+            {documents.length > 0 ? (
+              <>
+                <TabSummary
+                  totalFiles={documents.length}
+                  totalSyncing={
+                    documents.filter((f) => f.status === "syncing").length
+                  }
+                />
+                <DataTable files={documents} />
+              </>
+            ) : (
+              <EmptyState
+                icon={FolderOpen}
+                title="Belum ada dokumen yang diunggah"
+                description="Unggah file PDF, TXT, atau DOCX sebagai sumber pengetahuan untuk chatbot Asisten CS Anda."
+                onUpload={handleUpload}
+              />
+            )}
+          </TabsContent>
+
+          {/* Tab 2: Transactions */}
+          <TabsContent value="transactions" className="mt-0">
+            {transactions.length > 0 ? (
+              <>
+                <TabSummary
+                  totalFiles={transactions.length}
+                  totalSyncing={
+                    transactions.filter((f) => f.status === "syncing").length
+                  }
+                />
+                <DataTable files={transactions} />
+              </>
+            ) : (
+              <EmptyState
+                icon={Database}
+                title="Belum ada data transaksi yang diunggah"
+                description="Unggah file CSV atau Excel berisi data penjualan, pengeluaran, atau stok untuk Asisten Analitik Anda."
+                onUpload={handleUpload}
+              />
+            )}
+          </TabsContent>
+        </Tabs>
       </div>
-    </DashboardLayout>
+    </div>
   );
 }

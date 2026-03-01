@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -388,231 +387,229 @@ export default function BotBuilderPage() {
   };
 
   return (
-    <DashboardLayout>
-      <div className="flex flex-1 flex-col overflow-hidden">
-        {/* ── Header ────────────────────────── */}
-        <header className="flex shrink-0 items-center gap-4 border-b border-border/60 bg-white px-8 py-4">
-          <Link
-            to="/dashboard/chatbot"
-            className="flex h-9 w-9 items-center justify-center rounded-xl text-muted-foreground transition hover:bg-slate-100 hover:text-foreground"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </Link>
-          <div>
-            <h1 className="text-base font-bold tracking-tight text-foreground">
-              Studio Pembuat Chatbot
-            </h1>
-            <p className="text-xs text-muted-foreground">
-              Konfigurasikan identitas, pengetahuan, dan saluran publikasi
-              asisten AI Anda.
-            </p>
-          </div>
-        </header>
+    <div className="flex flex-1 flex-col overflow-hidden">
+      {/* ── Header ────────────────────────── */}
+      <header className="flex shrink-0 items-center gap-4 border-b border-border/60 bg-white px-8 py-4">
+        <Link
+          to="/dashboard/chatbot"
+          className="flex h-9 w-9 items-center justify-center rounded-xl text-muted-foreground transition hover:bg-slate-100 hover:text-foreground"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </Link>
+        <div>
+          <h1 className="text-base font-bold tracking-tight text-foreground">
+            Studio Pembuat Chatbot
+          </h1>
+          <p className="text-xs text-muted-foreground">
+            Konfigurasikan identitas, pengetahuan, dan saluran publikasi asisten
+            AI Anda.
+          </p>
+        </div>
+      </header>
 
-        {/* ── Split-Screen Body ─────────────── */}
-        <div className="flex min-h-0 flex-1 overflow-hidden flex-col lg:flex-row">
-          {/* Left Column — Form (Scrollable) */}
-          <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-slate-50">
-            <div className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain px-6 py-6 lg:px-8">
-              <form
-                id="bot-builder-form"
-                onSubmit={handleSubmit(onSubmit)}
-                className="mx-auto max-w-2xl space-y-6"
+      {/* ── Split-Screen Body ─────────────── */}
+      <div className="flex min-h-0 flex-1 overflow-hidden flex-col lg:flex-row">
+        {/* Left Column — Form (Scrollable) */}
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-slate-50">
+          <div className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain px-6 py-6 lg:px-8">
+            <form
+              id="bot-builder-form"
+              onSubmit={handleSubmit(onSubmit)}
+              className="mx-auto max-w-2xl space-y-6"
+            >
+              {/* Card 1: Identitas Asisten */}
+              <Card className="rounded-xl border-border/60 shadow-sm">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+                      <Bot className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-sm font-bold">
+                        Identitas Asisten
+                      </CardTitle>
+                      <CardDescription className="text-xs">
+                        Beri nama dan karakter untuk asisten AI Anda
+                      </CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-5">
+                  {/* Name */}
+                  <div className="space-y-2">
+                    <Label htmlFor="bot-name" className="text-sm font-medium">
+                      Nama Asisten <span className="text-destructive">*</span>
+                    </Label>
+                    <Input
+                      id="bot-name"
+                      placeholder="cth. Asisten Batik Pak Wiryo"
+                      className={cn(
+                        "rounded-xl",
+                        errors.name &&
+                          "border-destructive focus-visible:ring-destructive/30",
+                      )}
+                      {...register("name")}
+                    />
+                    {errors.name && (
+                      <p className="text-xs text-destructive">
+                        {errors.name.message}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Persona */}
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="bot-persona"
+                      className="text-sm font-medium"
+                    >
+                      Peran & Karakter{" "}
+                      <span className="text-destructive">*</span>
+                    </Label>
+                    <Textarea
+                      id="bot-persona"
+                      placeholder="cth. Jawab dengan ramah, gunakan sapaan 'Kak', fokus pada detail motif, teknik pembuatan, dan harga batik."
+                      className={cn(
+                        "min-h-[100px] resize-none rounded-xl",
+                        errors.persona &&
+                          "border-destructive focus-visible:ring-destructive/30",
+                      )}
+                      {...register("persona")}
+                    />
+                    {errors.persona ? (
+                      <p className="text-xs text-destructive">
+                        {errors.persona.message}
+                      </p>
+                    ) : (
+                      <p className="text-xs text-muted-foreground">
+                        Jelaskan bagaimana asisten AI ini harus menjawab
+                        pertanyaan pelanggan.
+                      </p>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Card 2: Knowledge Base */}
+              <Card className="rounded-xl border-border/60 shadow-sm">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+                      <FileText className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-sm font-bold">
+                        Otak Asisten / Sumber Pengetahuan
+                      </CardTitle>
+                      <CardDescription className="text-xs">
+                        Unggah file yang menjadi dasar pengetahuan chatbot
+                      </CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <KnowledgeDropzone
+                    files={files}
+                    onDrop={onDrop}
+                    onRemove={removeFile}
+                  />
+                </CardContent>
+              </Card>
+
+              {/* Card 3: Channels */}
+              <Card className="rounded-xl border-border/60 shadow-sm">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+                      <SmartphoneNfc className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-sm font-bold">
+                        Saluran Publikasi
+                      </CardTitle>
+                      <CardDescription className="text-xs">
+                        Pilih platform tempat chatbot Anda akan tersedia
+                      </CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <Controller
+                    control={control}
+                    name="channelWeb"
+                    render={({ field }) => (
+                      <ChannelToggle
+                        id="ch-web"
+                        icon={<Globe className="h-4 w-4" />}
+                        label="Web Chat"
+                        description="Widget chat di website Anda"
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    )}
+                  />
+                  <Controller
+                    control={control}
+                    name="channelWhatsApp"
+                    render={({ field }) => (
+                      <ChannelToggle
+                        id="ch-wa"
+                        icon={<MessageCircle className="h-4 w-4" />}
+                        label="WhatsApp"
+                        description="Integrasi dengan WhatsApp Business API"
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    )}
+                  />
+                  <Controller
+                    control={control}
+                    name="channelTelegram"
+                    render={({ field }) => (
+                      <ChannelToggle
+                        id="ch-tg"
+                        icon={<Send className="h-4 w-4" />}
+                        label="Telegram"
+                        description="Terhubung dengan Telegram Bot API"
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    )}
+                  />
+                </CardContent>
+              </Card>
+            </form>
+          </div>
+
+          {/* Submit CTA — pinned footer */}
+          <div className="shrink-0 border-t border-border/60 bg-white/95 px-6 py-4 backdrop-blur lg:px-8">
+            <div className="mx-auto flex max-w-2xl items-center justify-between">
+              <p className="text-xs text-muted-foreground">
+                {files.length > 0
+                  ? `${files.length} file siap diunggah`
+                  : "Belum ada file pengetahuan"}
+              </p>
+              <Button
+                type="submit"
+                form="bot-builder-form"
+                disabled={!isValid || files.length === 0}
+                className="gap-2 rounded-xl bg-cta px-8 text-sm font-bold text-cta-foreground shadow-lg shadow-cta/20 transition hover:brightness-105 disabled:opacity-50 disabled:shadow-none"
+                size="lg"
               >
-                {/* Card 1: Identitas Asisten */}
-                <Card className="rounded-xl border-border/60 shadow-sm">
-                  <CardHeader className="pb-4">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
-                        <Bot className="h-5 w-5 text-primary" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-sm font-bold">
-                          Identitas Asisten
-                        </CardTitle>
-                        <CardDescription className="text-xs">
-                          Beri nama dan karakter untuk asisten AI Anda
-                        </CardDescription>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-5">
-                    {/* Name */}
-                    <div className="space-y-2">
-                      <Label htmlFor="bot-name" className="text-sm font-medium">
-                        Nama Asisten <span className="text-destructive">*</span>
-                      </Label>
-                      <Input
-                        id="bot-name"
-                        placeholder="cth. Asisten Batik Pak Wiryo"
-                        className={cn(
-                          "rounded-xl",
-                          errors.name &&
-                            "border-destructive focus-visible:ring-destructive/30",
-                        )}
-                        {...register("name")}
-                      />
-                      {errors.name && (
-                        <p className="text-xs text-destructive">
-                          {errors.name.message}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Persona */}
-                    <div className="space-y-2">
-                      <Label
-                        htmlFor="bot-persona"
-                        className="text-sm font-medium"
-                      >
-                        Peran & Karakter{" "}
-                        <span className="text-destructive">*</span>
-                      </Label>
-                      <Textarea
-                        id="bot-persona"
-                        placeholder="cth. Jawab dengan ramah, gunakan sapaan 'Kak', fokus pada detail motif, teknik pembuatan, dan harga batik."
-                        className={cn(
-                          "min-h-[100px] resize-none rounded-xl",
-                          errors.persona &&
-                            "border-destructive focus-visible:ring-destructive/30",
-                        )}
-                        {...register("persona")}
-                      />
-                      {errors.persona ? (
-                        <p className="text-xs text-destructive">
-                          {errors.persona.message}
-                        </p>
-                      ) : (
-                        <p className="text-xs text-muted-foreground">
-                          Jelaskan bagaimana asisten AI ini harus menjawab
-                          pertanyaan pelanggan.
-                        </p>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Card 2: Knowledge Base */}
-                <Card className="rounded-xl border-border/60 shadow-sm">
-                  <CardHeader className="pb-4">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
-                        <FileText className="h-5 w-5 text-primary" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-sm font-bold">
-                          Otak Asisten / Sumber Pengetahuan
-                        </CardTitle>
-                        <CardDescription className="text-xs">
-                          Unggah file yang menjadi dasar pengetahuan chatbot
-                        </CardDescription>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <KnowledgeDropzone
-                      files={files}
-                      onDrop={onDrop}
-                      onRemove={removeFile}
-                    />
-                  </CardContent>
-                </Card>
-
-                {/* Card 3: Channels */}
-                <Card className="rounded-xl border-border/60 shadow-sm">
-                  <CardHeader className="pb-4">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
-                        <SmartphoneNfc className="h-5 w-5 text-primary" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-sm font-bold">
-                          Saluran Publikasi
-                        </CardTitle>
-                        <CardDescription className="text-xs">
-                          Pilih platform tempat chatbot Anda akan tersedia
-                        </CardDescription>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <Controller
-                      control={control}
-                      name="channelWeb"
-                      render={({ field }) => (
-                        <ChannelToggle
-                          id="ch-web"
-                          icon={<Globe className="h-4 w-4" />}
-                          label="Web Chat"
-                          description="Widget chat di website Anda"
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      )}
-                    />
-                    <Controller
-                      control={control}
-                      name="channelWhatsApp"
-                      render={({ field }) => (
-                        <ChannelToggle
-                          id="ch-wa"
-                          icon={<MessageCircle className="h-4 w-4" />}
-                          label="WhatsApp"
-                          description="Integrasi dengan WhatsApp Business API"
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      )}
-                    />
-                    <Controller
-                      control={control}
-                      name="channelTelegram"
-                      render={({ field }) => (
-                        <ChannelToggle
-                          id="ch-tg"
-                          icon={<Send className="h-4 w-4" />}
-                          label="Telegram"
-                          description="Terhubung dengan Telegram Bot API"
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      )}
-                    />
-                  </CardContent>
-                </Card>
-              </form>
-            </div>
-
-            {/* Submit CTA — pinned footer */}
-            <div className="shrink-0 border-t border-border/60 bg-white/95 px-6 py-4 backdrop-blur lg:px-8">
-              <div className="mx-auto flex max-w-2xl items-center justify-between">
-                <p className="text-xs text-muted-foreground">
-                  {files.length > 0
-                    ? `${files.length} file siap diunggah`
-                    : "Belum ada file pengetahuan"}
-                </p>
-                <Button
-                  type="submit"
-                  form="bot-builder-form"
-                  disabled={!isValid || files.length === 0}
-                  className="gap-2 rounded-xl bg-cta px-8 text-sm font-bold text-cta-foreground shadow-lg shadow-cta/20 transition hover:brightness-105 disabled:opacity-50 disabled:shadow-none"
-                  size="lg"
-                >
-                  <Sparkles className="h-4 w-4" />
-                  Simpan & Nyalakan AI
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column — Live Preview (Sticky on desktop) */}
-          <div className="hidden border-l border-border/60 bg-white lg:flex lg:w-[420px] lg:shrink-0 lg:items-center lg:justify-center lg:overflow-y-auto lg:overscroll-y-contain lg:px-8">
-            <div>
-              <LivePreview botName={watchName} />
+                <Sparkles className="h-4 w-4" />
+                Simpan & Nyalakan AI
+              </Button>
             </div>
           </div>
         </div>
+
+        {/* Right Column — Live Preview (Sticky on desktop) */}
+        <div className="hidden border-l border-border/60 bg-white lg:flex lg:w-[420px] lg:shrink-0 lg:items-center lg:justify-center lg:overflow-y-auto lg:overscroll-y-contain lg:px-8">
+          <div>
+            <LivePreview botName={watchName} />
+          </div>
+        </div>
       </div>
-    </DashboardLayout>
+    </div>
   );
 }
