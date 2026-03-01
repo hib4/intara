@@ -34,6 +34,7 @@ services:
     environment:
       - DATABASE_URL=postgresql://intara:intara_secret@db:5432/intara
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - ALIBABA_API_KEY=${ALIBABA_API_KEY}
     depends_on:
       db:
         condition: service_healthy

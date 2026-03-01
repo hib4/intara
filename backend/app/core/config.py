@@ -24,6 +24,9 @@ class Settings(BaseSettings):
     # ── Google AI (Gemini embeddings) ────────────────────────
     GOOGLE_API_KEY: str = ""
 
+    # ── Alibaba Cloud / DashScope (Qwen alternative) ──────────
+    ALIBABA_API_KEY: str = ""
+
     # ── RAG settings ─────────────────────────────────────────
     CHUNK_SIZE: int = 1000
     CHUNK_OVERLAP: int = 200

@@ -27,7 +27,7 @@ from app.crud.crud_document import create_document_record, get_documents_by_chat
 from app.db.database import get_db
 from app.db.models import User
 from app.schemas.document import DocumentResponse, DocumentUploadResponse
-from app.services.rag_service import extract_text_from_file, process_and_embed_document
+from app.services.rag_service_qwen import extract_text_from_file, process_and_embed_document
 
 router = APIRouter(prefix="/documents", tags=["Documents"])
 

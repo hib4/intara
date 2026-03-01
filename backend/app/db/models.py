@@ -36,7 +36,7 @@ from app.db.database import Base
 try:
     from pgvector.sqlalchemy import Vector
 
-    VECTOR_TYPE = Vector(3072)  # Google gemini-embedding-001 dimensions
+    VECTOR_TYPE = Vector(1024)  # DashScope text-embedding-v3 dimensions
 except ImportError:
     VECTOR_TYPE = Text  # placeholder until pgvector is configured
 

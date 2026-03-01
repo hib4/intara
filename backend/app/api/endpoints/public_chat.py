@@ -26,8 +26,8 @@ from app.crud.crud_chat import get_or_create_session, save_message
 from app.db.database import get_db
 from app.db.models import Chatbot
 from app.schemas.chat import ChatRequest, ChatResponse
-from app.services.llm_service import generate_answer
-from app.services.vector_search import search_similar_chunks
+from app.services.llm_service_qwen import generate_answer
+from app.services.vector_search_qwen import search_similar_chunks
 
 logger = logging.getLogger(__name__)
 
